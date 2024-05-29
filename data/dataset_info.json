@@ -1,4 +1,16 @@
 {
+  "AssetGeneration_small_train": {
+    "file_name": "AssetGeneration/small_train.json"
+  },
+  "AssetGeneration_small_test": {
+    "file_name": "AssetGeneration/small_test.json"
+  },
+  "AssetGeneration_train": {
+    "file_name": "AssetGeneration/train.json"
+  },
+  "AssetGeneration_test": {
+    "file_name": "AssetGeneration/test.json"
+  },
   "identity": {
     "file_name": "identity.json"
   },

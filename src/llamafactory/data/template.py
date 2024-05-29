@@ -900,3 +900,12 @@ _register_template(
     format_user=StringFormatter(slots=["<human>:{{content}}\n<bot>:"]),
     format_separator=EmptyFormatter(slots=["\n"]),
 )
+
+
+_register_template(
+    name="asset_generation",
+    format_user=StringFormatter(slots=["<|user|>\n{{content}}", {"eos_token"}, "<|assistant|>"]),
+    format_assistant=StringFormatter(slots=["\n{{content}}", {"eos_token"}]),
+    format_system=StringFormatter(slots=["<|system|>\n{{content}}", {"eos_token"}]),
+)
+
