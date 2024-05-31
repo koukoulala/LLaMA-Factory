@@ -45,7 +45,7 @@ def construct_message(user_prompt_template, detail_info, Asset_list, data_idx, A
 
 def get_repeated_string_indices(string_list):
     count = Counter(string_list)
-    candidates = [string for string, freq in count.items() if freq >= 2 and string != ""]
+    candidates = [string for string, freq in count.items() if freq >= 1 and string != "" and len(string) < 70]
 
     if not candidates:
         return None, []
@@ -105,7 +105,7 @@ def main(args):
                 sd_doc = SD_text[:400]
                 detail_info += "LandingPage: " + sd_doc + " \n"
             if AssetType == "Headline":
-                detail_info += "CharacterLimit: between 10 to 20 characters. \n"
+                detail_info += "CharacterLimit: between 10 to 30 characters. \n"
             if AssetType == "Description":
                 min_length = min([len(asset) for asset in Asset_list])
                 detail_info += "CharacterLimit: between " + str(min_length) + " to 90 characters. \n"
@@ -146,7 +146,9 @@ def main(args):
                 Asset_list = list(set(Asset_list))
                 AssetCnt = random.randint(1, len(Asset_list))
                 rand_Asset_list = random.sample(Asset_list, AssetCnt)
-                message = construct_message(user_prompt_template, detail_info, rand_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
+                if AssetCnt > 1:
+                    detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
+                message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
                 #print("No Insight message: ", message)
                 full_data_list.append(message)
                 data_idx += 1
@@ -166,7 +168,7 @@ def main(args):
     print("Total data with Insight: ", data_withInsight)
 
     random.shuffle(full_data_list)
-    train_size = int(len(full_data_list) * 0.8)
+    train_size = int(len(full_data_list) * 0.95)
     train_data = full_data_list[:train_size]
     test_data = full_data_list[train_size:]
     print("Train data size: ", len(train_data))
@@ -219,12 +221,9 @@ def ConvertParquetToInferenceData(input_file, output_dir):
     fw_prompt.close()
     fw_response.close()
 
-def ConvertJsonToInferenceData(input_file, output_dir):
+def ConvertJsonToInferenceData(input_file, out_prompt_file, out_response_file):
     with open(input_file, 'r', encoding='utf-8') as fr_test:
         test_data = json.load(fr_test)
-
-    out_prompt_file = os.path.join(output_dir, "inference_prompt.tsv")
-    out_response_file = os.path.join(output_dir, "inference_groundtruth.tsv")
 
     fw_prompt = open(out_prompt_file, 'w', encoding='utf-8')
     fw_response = open(out_response_file, 'w', encoding='utf-8')
@@ -244,13 +243,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
     parser.add_argument('-i', '--input', help='input file', default="./OriginalCombinedAssets.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test.json")
-    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_AddDiversity.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_AddDiversity.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_AddDiversity.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_AddDiversity.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_AddDiversity.json")
     args = parser.parse_args()
-    #main(args)
-    #ConvertTestToInferenceData(args.test.replace(".tsv", ".parquet"), "../data/AssetGeneration/")
-    ConvertJsonToInferenceData(args.small_test, "./")
+    main(args)
+
+    out_prompt_file = "./inference_prompt_AddDiversity.tsv"
+    out_response_file = "./inference_groundtruth_AddDiversity.tsv"
+    ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
 
