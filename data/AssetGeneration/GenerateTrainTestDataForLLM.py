@@ -22,18 +22,7 @@ def reshape_category(CategoryName):
             else:
                 reshaped_category_name += " -- " + category
     return reshaped_category_name
-'''
-def construct_message(user_prompt_template, detail_info, Asset_list, data_idx, AssetCnt, AssetType, FullLanguage):
-    user_prompt_template = user_prompt_template.format(AssetCnt, AssetType, FullLanguage)
-    user_message = {"content": user_prompt_template + detail_info, "role": "user"}
-    assistant_content = ""
-    for asset in Asset_list:
-        assistant_content += "Ad:" + asset + "\n"
-    assistant_message = {"content": assistant_content, "role": "assistant"}
-    message = {"prompt_id": str(data_idx), "messages": [user_message, assistant_message]}
 
-    return message
-'''
 def construct_message(user_prompt_template, detail_info, Asset_list, data_idx, AssetCnt, AssetType, FullLanguage):
     instruction = user_prompt_template.format(AssetCnt, AssetType, FullLanguage)
     output = ""
@@ -43,7 +32,7 @@ def construct_message(user_prompt_template, detail_info, Asset_list, data_idx, A
 
     return message
 
-def get_repeated_string_indices(string_list):
+def get_insight_indices(string_list):
     count = Counter(string_list)
     candidates = [string for string, freq in count.items() if freq >= 1 and string != "" and len(string) < 70]
 
@@ -69,18 +58,6 @@ def main(args):
     with open(inputfile, 'r', encoding='utf-8') as fp:
         for line in fp.readlines():
             FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, sd_doc = line.split('\t')
-            '''
-            print("FinalUrl: ", FinalUrl)
-            print("Domain: ", Domain)
-            print("CategoryName: ", CategoryName)
-            print("DescriptionOfAdvertiser: ", DescriptionOfAdvertiser)
-            print("FullLanguage: ", FullLanguage)
-            print("AssetType: ", AssetType)
-            print("JointAsset: ", JointAsset)
-            print("JointIsDKI: ", JointIsDKI)
-            print("JointInsight: ", JointInsight)
-            print("sd_doc: ", sd_doc)
-            '''
             Asset_list = JointAsset.split('[SEP]')
             Asset_list = [asset.strip() for asset in Asset_list]
             IsDKI_list = JointIsDKI.split('[SEP]')
@@ -127,7 +104,7 @@ def main(args):
                 Insight_list = [insight for insight, isDKI in zip(Insight_list, IsDKI_list) if isDKI == "0"]
 
             if any(Insight_list) and random.random() < 0.5:
-                Insight, indices = get_repeated_string_indices(Insight_list)
+                Insight, indices = get_insight_indices(Insight_list)
                 if Insight:
                     #print("Doing generation with insight for the non-DKI assets.")
                     Insight_Asset_list = [Asset_list[i] for i in indices]
@@ -146,8 +123,10 @@ def main(args):
                 Asset_list = list(set(Asset_list))
                 AssetCnt = random.randint(1, len(Asset_list))
                 rand_Asset_list = random.sample(Asset_list, AssetCnt)
-                if AssetCnt > 1:
+                if AssetCnt > 1 and random.random() < 0.5:
                     detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
+                else:
+                    detail_insight_info = detail_info
                 message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
                 #print("No Insight message: ", message)
                 full_data_list.append(message)
@@ -193,33 +172,6 @@ def main(args):
         json.dump(samll_test_data, fw_small_test, ensure_ascii=False, indent=4)
 
     print("Data generation is done.")
-
-def ConvertParquetToInferenceData(input_file, output_dir):
-    df = pd.read_parquet(input_file)
-    print(df.head())
-    print(df.columns)
-    print(df.shape)
-
-    out_prompt_file = os.path.join(output_dir, "inference_prompt.tsv")
-    out_response_file = os.path.join(output_dir, "inference_response.tsv")
-
-    fw_prompt = open(out_prompt_file, 'w', encoding='utf-8')
-    fw_response = open(out_response_file, 'w', encoding='utf-8')
-
-    for index, row in df.iterrows():
-        prompt_id = row['prompt_id']
-        message = row['messages']
-        for me_json in message:
-            if me_json['role'] == "user":
-                prompt_json = {"prompt_id": prompt_id, "prompt": [me_json]}
-                fw_prompt.write(json.dumps(prompt_json, ensure_ascii=False) + "\n")
-            elif me_json['role'] == "assistant":
-                assistant_response = me_json['content']
-                response_json = {"prompt_id": prompt_id, "response": [me_json]}
-                fw_response.write(json.dumps(response_json, ensure_ascii=False) + "\n")
-
-    fw_prompt.close()
-    fw_response.close()
 
 def ConvertJsonToInferenceData(input_file, out_prompt_file, out_response_file):
     with open(input_file, 'r', encoding='utf-8') as fr_test:

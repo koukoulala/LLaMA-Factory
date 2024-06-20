@@ -11,6 +11,26 @@
   "AssetGeneration_test": {
     "file_name": "AssetGeneration/test.json"
   },
+  "AssetGeneration_orpo_train": {
+    "file_name": "AssetGeneration/train_orpo.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "output",
+      "rejected": "rejected"
+    }
+  },
+  "AssetGeneration_orpo_test": {
+    "file_name": "AssetGeneration/test_orpo.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "output",
+      "rejected": "rejected"
+    }
+  },
   "identity": {
     "file_name": "identity.json"
   },
