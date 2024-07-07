@@ -11,6 +11,9 @@
   "AssetGeneration_test": {
     "file_name": "AssetGeneration/test.json"
   },
+  "AssetGeneration_test_add_diversity": {
+    "file_name": "AssetGeneration/test_AddDiversity.json"
+  },
   "AssetGeneration_orpo_train": {
     "file_name": "AssetGeneration/train_orpo.json",
     "ranking": true,
@@ -21,8 +24,8 @@
       "rejected": "rejected"
     }
   },
-  "AssetGeneration_orpo_test": {
-    "file_name": "AssetGeneration/test_orpo.json",
+  "AssetGeneration_orpo_train_small": {
+    "file_name": "AssetGeneration/backup/train_orpo.json",
     "ranking": true,
     "columns": {
       "prompt": "instruction",

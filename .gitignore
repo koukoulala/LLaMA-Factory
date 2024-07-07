@@ -1,5 +1,6 @@
 data/AssetGeneration/*.tsv
 data/AssetGeneration/*.json
+data/AssetGeneration/backup
 ckpts/
 output/
 # Byte-compiled / optimized / DLL files

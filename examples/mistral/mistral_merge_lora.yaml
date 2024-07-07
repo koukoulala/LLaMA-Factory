@@ -2,12 +2,13 @@
 
 ### model
 model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
-adapter_name_or_path: saves/mistral/fsdp_qlora_sft
+#adapter_name_or_path: saves/mistral/orpo_qlora_continue_2
+adapter_name_or_path: saves/mistral/orpo_qlora
 template: mistral
 finetuning_type: lora
 
 ### export
-export_dir: saves/mistral/fsdp_qlora_sft/merge/
+export_dir: saves/mistral/orpo_qlora/merge/
 export_size: 2
 export_device: cpu
 export_legacy_format: false

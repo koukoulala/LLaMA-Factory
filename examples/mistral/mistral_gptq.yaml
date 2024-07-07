@@ -1,0 +1,11 @@
+### model
+model_name_or_path: saves/mistral/orpo_qlora_continue_2/merge/
+template: mistral
+
+### export
+export_dir: saves/mistral/orpo_qlora_continue_2/merge_gptq
+export_quantization_bit: 4
+export_quantization_dataset: ./data/AssetGeneration/small_test.json
+export_size: 2
+export_device: cpu
+export_legacy_format: false

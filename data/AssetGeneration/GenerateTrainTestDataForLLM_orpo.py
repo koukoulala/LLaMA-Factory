@@ -89,7 +89,7 @@ def get_rejected_assets(Chosen_Asset_list, AssetCnt, FullLanguage, Asset_list, a
 
     asset_list_len = len(Asset_list)
 
-    if AssetCnt > 1 and p <= 0.6:
+    if AssetCnt > 1 and p <= 0.7:
         # diversity
         sample_cnt = random.randint(1, AssetCnt - 1)
         rejected_Asset_list = random.sample(Chosen_Asset_list, sample_cnt)
@@ -173,7 +173,7 @@ def main(args):
 
     user_prompt_template = "Please generate {} Ad {} in {} language, based on the following information:\n"
     for idx, row in all_data.iterrows():
-        if idx <= 50000:
+        if idx <= 500000:
             FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, sd_doc = row
             Asset_list = JointAsset.split('[SEP]')
             Asset_list = [asset.strip() for asset in Asset_list]
@@ -208,31 +208,32 @@ def main(args):
                 DKI_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "1"]
                 DKI_Asset_list = list(set(DKI_Asset_list))
                 AssetCnt = len(DKI_Asset_list)
-                Insight = "Incorporate dynamic keyword insertion to make your ad more relevant to query."
-                detail_DKI_info = detail_info + "Insight: " + Insight + " \n"
+                if AssetCnt > 1 or random.random() <= 0.8:
+                    Insight = "Incorporate dynamic keyword insertion to make your ad more relevant to query."
+                    detail_DKI_info = detail_info + "Insight: " + Insight + " \n"
 
-                # Get rejected assets
-                if "0" in IsDKI_list and random.random() <= 0.6:
-                    rejected_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
-                    rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
-                    random.shuffle(rejected_Asset_list)
-                    rejected_reasons["DKI Insight"] += 1
-                    #print("Chosen_Asset_list: ", DKI_Asset_list)
-                    #print("DKI Insight: ", rejected_Asset_list)
-                else:
-                    # Do other reject methods
-                    rejected_Asset_list, rejected_reasons = get_rejected_assets(DKI_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
+                    # Get rejected assets
+                    if "0" in IsDKI_list and random.random() <= 0.6:
+                        rejected_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
+                        rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
+                        random.shuffle(rejected_Asset_list)
+                        rejected_reasons["DKI Insight"] += 1
+                        #print("Chosen_Asset_list: ", DKI_Asset_list)
+                        #print("DKI Insight: ", rejected_Asset_list)
+                    else:
+                        # Do other reject methods
+                        rejected_Asset_list, rejected_reasons = get_rejected_assets(DKI_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
 
-                message = construct_message_orpo(user_prompt_template, detail_DKI_info, DKI_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
-                #print("IsDKI message: ", message)
-                full_data_list.append(message)
-                data_idx += 1
-                data_withDKI += 1
-                # refine non-DKI assets and insights
-                Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
-                Insight_list = [insight for insight, isDKI in zip(Insight_list, IsDKI_list) if isDKI == "0"]
+                    message = construct_message_orpo(user_prompt_template, detail_DKI_info, DKI_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
+                    #print("IsDKI message: ", message)
+                    full_data_list.append(message)
+                    data_idx += 1
+                    data_withDKI += 1
+                    # refine non-DKI assets and insights
+                    Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
+                    Insight_list = [insight for insight, isDKI in zip(Insight_list, IsDKI_list) if isDKI == "0"]
 
-            if any(Insight_list) and random.random() < 0.5:
+            if any(Insight_list) and random.random() <= 0.5:
                 candidates = get_insight_indices(Insight_list)
                 if candidates:
                     #print("Doing generation with insight for the non-DKI assets.")
@@ -240,42 +241,44 @@ def main(args):
                     Insight_Asset_list = [asset for asset, insight in zip(Asset_list, Insight_list) if insight == Insight]
                     Insight_Asset_list = list(set(Insight_Asset_list))
                     AssetCnt = len(Insight_Asset_list)
-                    detail_insight_info = detail_info + "Insight: " + Insight + " \n"
+                    if AssetCnt > 1 or random.random() <= 0.8:
+                        detail_insight_info = detail_info + "Insight: " + Insight + " \n"
 
-                    if random.random() <= 0.4 and len(candidates) > 1:
-                        rejected_Asset_list = [asset for asset, insight in zip(Asset_list, Insight_list) if insight != Insight and asset not in Insight_Asset_list]
-                        if rejected_Asset_list:
-                            rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
-                            random.shuffle(rejected_Asset_list)
+                        if random.random() <= 0.4 and len(candidates) > 1:
+                            rejected_Asset_list = [asset for asset, insight in zip(Asset_list, Insight_list) if insight != Insight and asset not in Insight_Asset_list]
+                            if rejected_Asset_list:
+                                rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
+                                random.shuffle(rejected_Asset_list)
+                            else:
+                                rejected_Asset_list = []
+                            rejected_reasons["Other Insight"] += 1
+                            #print("Chosen_Asset_list: ", Insight_Asset_list)
+                            #print("Other Insight: ", rejected_Asset_list)
                         else:
-                            rejected_Asset_list = []
-                        rejected_reasons["Other Insight"] += 1
-                        #print("Chosen_Asset_list: ", Insight_Asset_list)
-                        #print("Other Insight: ", rejected_Asset_list)
-                    else:
-                        rejected_Asset_list, rejected_reasons = get_rejected_assets(Insight_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
-               
-                    message = construct_message_orpo(user_prompt_template, detail_insight_info, Insight_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
-                    #print("Insight message: ", message)
-                    full_data_list.append(message)
-                    data_idx += 1
-                    data_withInsight += 1
+                            rejected_Asset_list, rejected_reasons = get_rejected_assets(Insight_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
+                
+                        message = construct_message_orpo(user_prompt_template, detail_insight_info, Insight_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
+                        #print("Insight message: ", message)
+                        full_data_list.append(message)
+                        data_idx += 1
+                        data_withInsight += 1
 
             if any(Asset_list):
                 # Doing generation without insight for the non-DKI assets
                 Asset_list = list(set(Asset_list))
                 AssetCnt = random.randint(1, len(Asset_list))
-                rand_Asset_list = random.sample(Asset_list, AssetCnt)
-                if AssetCnt > 1 and random.random() <= 0.5:
-                    detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
-                else:
-                    detail_insight_info = detail_info
+                if AssetCnt > 1 or random.random() <= 0.6:
+                    rand_Asset_list = random.sample(Asset_list, AssetCnt)
+                    if AssetCnt > 1 and random.random() <= 0.5:
+                        detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
+                    else:
+                        detail_insight_info = detail_info
 
-                rejected_Asset_list, rejected_reasons = get_rejected_assets(rand_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
-                message = construct_message_orpo(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
-                #print("No Insight message: ", message)
-                full_data_list.append(message)
-                data_idx += 1
+                    rejected_Asset_list, rejected_reasons = get_rejected_assets(rand_Asset_list, AssetCnt, FullLanguage, Asset_list, all_data, idx, rejected_reasons)
+                    message = construct_message_orpo(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
+                    #print("No Insight message: ", message)
+                    full_data_list.append(message)
+                    data_idx += 1
 
             if input_row % 10000 == 0:
                 print("\nProcessing row: ", input_row)
@@ -342,15 +345,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
     parser.add_argument('-i', '--input', help='input file', default="./OriginalCombinedAssets.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test_orpo.json")
-    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo_2.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo_2.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_orpo_2.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo_2.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo_2.json")
     args = parser.parse_args()
     main(args)
 
-    out_prompt_file = "./inference_prompt_orpo.tsv"
-    out_response_file = "./inference_groundtruth_orpo.tsv"
+    out_prompt_file = "./inference_prompt_orpo_2.tsv"
+    out_response_file = "./inference_groundtruth_orpo_2.tsv"
     ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
 
