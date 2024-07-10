@@ -79,7 +79,7 @@ def main(file_path):
 # 运行主函数并输出结果
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
-    parser.add_argument('--input', help='input file', default="./saves/mistral/orpo_qlora/predict/generated_predictions.jsonl")
+    parser.add_argument('--input', help='input file', default="./saves/mistral/orpo_qlora_continue_2/predict_add_diversity/generated_predictions.jsonl")
 
     args = parser.parse_args()
 
