@@ -89,7 +89,7 @@ def get_rejected_assets(Chosen_Asset_list, AssetCnt, FullLanguage, Asset_list, a
 
     asset_list_len = len(Asset_list)
 
-    if AssetCnt > 1 and p <= 0.7:
+    if AssetCnt > 1 and p <= 1:
         # diversity
         sample_cnt = random.randint(1, AssetCnt - 1)
         rejected_Asset_list = random.sample(Chosen_Asset_list, sample_cnt)
@@ -173,7 +173,7 @@ def main(args):
 
     user_prompt_template = "Please generate {} Ad {} in {} language, based on the following information:\n"
     for idx, row in all_data.iterrows():
-        if idx <= 500000:
+        if idx <= 100000:
             FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, sd_doc = row
             Asset_list = JointAsset.split('[SEP]')
             Asset_list = [asset.strip() for asset in Asset_list]
@@ -213,7 +213,7 @@ def main(args):
                     detail_DKI_info = detail_info + "Insight: " + Insight + " \n"
 
                     # Get rejected assets
-                    if "0" in IsDKI_list and random.random() <= 0.6:
+                    if "0" in IsDKI_list and random.random() <= 0.2:
                         rejected_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
                         rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
                         random.shuffle(rejected_Asset_list)
@@ -244,7 +244,7 @@ def main(args):
                     if AssetCnt > 1 or random.random() <= 0.8:
                         detail_insight_info = detail_info + "Insight: " + Insight + " \n"
 
-                        if random.random() <= 0.4 and len(candidates) > 1:
+                        if random.random() <= 0.2 and len(candidates) > 1:
                             rejected_Asset_list = [asset for asset, insight in zip(Asset_list, Insight_list) if insight != Insight and asset not in Insight_Asset_list]
                             if rejected_Asset_list:
                                 rejected_Asset_list = (rejected_Asset_list * (AssetCnt // len(rejected_Asset_list) + 1))[:AssetCnt]
@@ -345,15 +345,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
     parser.add_argument('-i', '--input', help='input file', default="./OriginalCombinedAssets.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo_2.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo_2.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test_orpo_2.json")
-    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo_2.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo_2.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo_3.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo_3.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_orpo_3.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo_3.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo_3.json")
     args = parser.parse_args()
     main(args)
 
-    out_prompt_file = "./inference_prompt_orpo_2.tsv"
-    out_response_file = "./inference_groundtruth_orpo_2.tsv"
+    out_prompt_file = "./inference_prompt_orpo_3.tsv"
+    out_response_file = "./inference_groundtruth_orpo_3.tsv"
     ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
 

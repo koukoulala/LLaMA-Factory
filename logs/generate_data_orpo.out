@@ -12,515 +12,71 @@ Total data with Insight:  0
 Rejected reasons:  {'DKI Insight': 0, 'Other Insight': 0, 'Diversity': 1, 'Different Language': 0, 'Wrong Assets': 0, 'Asset Count': 0}
 
 Processing row:  10000
-Total data rows:  14770
-Total data with DKI:  1311
-Total data with Insight:  4422
-Rejected reasons:  {'DKI Insight': 762, 'Other Insight': 1729, 'Diversity': 6493, 'Different Language': 1233, 'Wrong Assets': 3301, 'Asset Count': 1252}
+Total data rows:  14673
+Total data with DKI:  1254
+Total data with Insight:  4400
+Rejected reasons:  {'DKI Insight': 249, 'Other Insight': 825, 'Diversity': 9841, 'Different Language': 330, 'Wrong Assets': 3033, 'Asset Count': 395}
 
 Processing row:  20000
-Total data rows:  29468
-Total data with DKI:  2632
-Total data with Insight:  8786
-Rejected reasons:  {'DKI Insight': 1518, 'Other Insight': 3433, 'Diversity': 12971, 'Different Language': 2483, 'Wrong Assets': 6611, 'Asset Count': 2452}
+Total data rows:  29452
+Total data with DKI:  2585
+Total data with Insight:  8812
+Rejected reasons:  {'DKI Insight': 517, 'Other Insight': 1644, 'Diversity': 19709, 'Different Language': 711, 'Wrong Assets': 6069, 'Asset Count': 802}
 
 Processing row:  30000
-Total data rows:  44086
-Total data with DKI:  3919
-Total data with Insight:  13099
-Rejected reasons:  {'DKI Insight': 2209, 'Other Insight': 5102, 'Diversity': 19349, 'Different Language': 3696, 'Wrong Assets': 10009, 'Asset Count': 3721}
+Total data rows:  44083
+Total data with DKI:  3863
+Total data with Insight:  13180
+Rejected reasons:  {'DKI Insight': 773, 'Other Insight': 2488, 'Diversity': 29462, 'Different Language': 1103, 'Wrong Assets': 9075, 'Asset Count': 1182}
 
 Processing row:  40000
-Total data rows:  58885
-Total data with DKI:  5225
-Total data with Insight:  17571
-Rejected reasons:  {'DKI Insight': 2949, 'Other Insight': 6813, 'Diversity': 25810, 'Different Language': 4903, 'Wrong Assets': 13376, 'Asset Count': 5034}
+Total data rows:  58812
+Total data with DKI:  5153
+Total data with Insight:  17602
+Rejected reasons:  {'DKI Insight': 1042, 'Other Insight': 3355, 'Diversity': 39189, 'Different Language': 1464, 'Wrong Assets': 12196, 'Asset Count': 1566}
 
 Processing row:  50000
-Total data rows:  73600
-Total data with DKI:  6577
-Total data with Insight:  21967
-Rejected reasons:  {'DKI Insight': 3690, 'Other Insight': 8597, 'Diversity': 32233, 'Different Language': 6086, 'Wrong Assets': 16732, 'Asset Count': 6262}
+Total data rows:  73588
+Total data with DKI:  6478
+Total data with Insight:  22019
+Rejected reasons:  {'DKI Insight': 1300, 'Other Insight': 4217, 'Diversity': 48953, 'Different Language': 1838, 'Wrong Assets': 15337, 'Asset Count': 1943}
 
 Processing row:  60000
-Total data rows:  88229
-Total data with DKI:  7836
-Total data with Insight:  26307
-Rejected reasons:  {'DKI Insight': 4406, 'Other Insight': 10256, 'Diversity': 38671, 'Different Language': 7314, 'Wrong Assets': 20118, 'Asset Count': 7464}
+Total data rows:  88415
+Total data with DKI:  7821
+Total data with Insight:  26452
+Rejected reasons:  {'DKI Insight': 1563, 'Other Insight': 5070, 'Diversity': 58751, 'Different Language': 2207, 'Wrong Assets': 18483, 'Asset Count': 2341}
 
 Processing row:  70000
-Total data rows:  102868
-Total data with DKI:  9126
-Total data with Insight:  30624
-Rejected reasons:  {'DKI Insight': 5120, 'Other Insight': 11952, 'Diversity': 45056, 'Different Language': 8511, 'Wrong Assets': 23490, 'Asset Count': 8739}
+Total data rows:  103085
+Total data with DKI:  9176
+Total data with Insight:  30757
+Rejected reasons:  {'DKI Insight': 1856, 'Other Insight': 5884, 'Diversity': 68530, 'Different Language': 2558, 'Wrong Assets': 21546, 'Asset Count': 2711}
 
 Processing row:  80000
-Total data rows:  117587
-Total data with DKI:  10404
-Total data with Insight:  35068
-Rejected reasons:  {'DKI Insight': 5860, 'Other Insight': 13608, 'Diversity': 51521, 'Different Language': 9735, 'Wrong Assets': 26883, 'Asset Count': 9980}
+Total data rows:  117787
+Total data with DKI:  10448
+Total data with Insight:  35151
+Rejected reasons:  {'DKI Insight': 2087, 'Other Insight': 6737, 'Diversity': 78276, 'Different Language': 2950, 'Wrong Assets': 24672, 'Asset Count': 3065}
 
 Processing row:  90000
-Total data rows:  132337
-Total data with DKI:  11714
-Total data with Insight:  39520
-Rejected reasons:  {'DKI Insight': 6625, 'Other Insight': 15291, 'Diversity': 57933, 'Different Language': 11021, 'Wrong Assets': 30229, 'Asset Count': 11238}
+Total data rows:  132496
+Total data with DKI:  11770
+Total data with Insight:  39482
+Rejected reasons:  {'DKI Insight': 2334, 'Other Insight': 7598, 'Diversity': 88059, 'Different Language': 3326, 'Wrong Assets': 27765, 'Asset Count': 3414}
 
 Processing row:  100000
-Total data rows:  147117
-Total data with DKI:  13002
-Total data with Insight:  43971
-Rejected reasons:  {'DKI Insight': 7376, 'Other Insight': 17072, 'Diversity': 64447, 'Different Language': 12249, 'Wrong Assets': 33501, 'Asset Count': 12472}
-
-Processing row:  110000
-Total data rows:  161896
-Total data with DKI:  14405
-Total data with Insight:  48342
-Rejected reasons:  {'DKI Insight': 8159, 'Other Insight': 18779, 'Diversity': 70815, 'Different Language': 13495, 'Wrong Assets': 36932, 'Asset Count': 13716}
-
-Processing row:  120000
-Total data rows:  176625
-Total data with DKI:  15723
-Total data with Insight:  52742
-Rejected reasons:  {'DKI Insight': 8900, 'Other Insight': 20476, 'Diversity': 77187, 'Different Language': 14697, 'Wrong Assets': 40435, 'Asset Count': 14930}
-
-Processing row:  130000
-Total data rows:  191358
-Total data with DKI:  17061
-Total data with Insight:  57110
-Rejected reasons:  {'DKI Insight': 9657, 'Other Insight': 22168, 'Diversity': 83664, 'Different Language': 15884, 'Wrong Assets': 43819, 'Asset Count': 16166}
-
-Processing row:  140000
-Total data rows:  206150
-Total data with DKI:  18398
-Total data with Insight:  61546
-Rejected reasons:  {'DKI Insight': 10414, 'Other Insight': 23892, 'Diversity': 90037, 'Different Language': 17143, 'Wrong Assets': 47233, 'Asset Count': 17431}
-
-Processing row:  150000
-Total data rows:  220928
-Total data with DKI:  19717
-Total data with Insight:  65961
-Rejected reasons:  {'DKI Insight': 11170, 'Other Insight': 25572, 'Diversity': 96494, 'Different Language': 18425, 'Wrong Assets': 50604, 'Asset Count': 18663}
-
-Processing row:  160000
-Total data rows:  235551
-Total data with DKI:  20989
-Total data with Insight:  70336
-Rejected reasons:  {'DKI Insight': 11885, 'Other Insight': 27223, 'Diversity': 102883, 'Different Language': 19634, 'Wrong Assets': 54018, 'Asset Count': 19908}
-
-Processing row:  170000
-Total data rows:  250264
-Total data with DKI:  22258
-Total data with Insight:  74778
-Rejected reasons:  {'DKI Insight': 12599, 'Other Insight': 28863, 'Diversity': 109281, 'Different Language': 20909, 'Wrong Assets': 57447, 'Asset Count': 21165}
-
-Processing row:  180000
-Total data rows:  264910
-Total data with DKI:  23545
-Total data with Insight:  79138
-Rejected reasons:  {'DKI Insight': 13338, 'Other Insight': 30563, 'Diversity': 115609, 'Different Language': 22154, 'Wrong Assets': 60858, 'Asset Count': 22388}
-
-Processing row:  190000
-Total data rows:  279612
-Total data with DKI:  24840
-Total data with Insight:  83523
-Rejected reasons:  {'DKI Insight': 14065, 'Other Insight': 32297, 'Diversity': 122056, 'Different Language': 23442, 'Wrong Assets': 64153, 'Asset Count': 23599}
-
-Processing row:  200000
-Total data rows:  294349
-Total data with DKI:  26154
-Total data with Insight:  87912
-Rejected reasons:  {'DKI Insight': 14816, 'Other Insight': 34007, 'Diversity': 128488, 'Different Language': 24729, 'Wrong Assets': 67474, 'Asset Count': 24835}
-
-Processing row:  210000
-Total data rows:  309196
-Total data with DKI:  27480
-Total data with Insight:  92365
-Rejected reasons:  {'DKI Insight': 15564, 'Other Insight': 35677, 'Diversity': 135022, 'Different Language': 25959, 'Wrong Assets': 70937, 'Asset Count': 26037}
-
-Processing row:  220000
-Total data rows:  323890
-Total data with DKI:  28767
-Total data with Insight:  96762
-Rejected reasons:  {'DKI Insight': 16280, 'Other Insight': 37371, 'Diversity': 141461, 'Different Language': 27192, 'Wrong Assets': 74315, 'Asset Count': 27271}
-
-Processing row:  230000
-Total data rows:  338533
-Total data with DKI:  30117
-Total data with Insight:  101078
-Rejected reasons:  {'DKI Insight': 17080, 'Other Insight': 39012, 'Diversity': 147842, 'Different Language': 28432, 'Wrong Assets': 77671, 'Asset Count': 28496}
-
-Processing row:  240000
-Total data rows:  353290
-Total data with DKI:  31420
-Total data with Insight:  105476
-Rejected reasons:  {'DKI Insight': 17837, 'Other Insight': 40675, 'Diversity': 154342, 'Different Language': 29671, 'Wrong Assets': 81001, 'Asset Count': 29764}
-
-Processing row:  250000
-Total data rows:  368004
-Total data with DKI:  32720
-Total data with Insight:  109880
-Rejected reasons:  {'DKI Insight': 18583, 'Other Insight': 42357, 'Diversity': 160761, 'Different Language': 30893, 'Wrong Assets': 84449, 'Asset Count': 30961}
-
-Processing row:  260000
-Total data rows:  382683
-Total data with DKI:  34060
-Total data with Insight:  114217
-Rejected reasons:  {'DKI Insight': 19360, 'Other Insight': 44073, 'Diversity': 167126, 'Different Language': 32115, 'Wrong Assets': 87807, 'Asset Count': 32202}
-
-Processing row:  270000
-Total data rows:  397446
-Total data with DKI:  35402
-Total data with Insight:  118598
-Rejected reasons:  {'DKI Insight': 20127, 'Other Insight': 45715, 'Diversity': 173548, 'Different Language': 33373, 'Wrong Assets': 91250, 'Asset Count': 33433}
-
-Processing row:  280000
-Total data rows:  412133
-Total data with DKI:  36698
-Total data with Insight:  123036
-Rejected reasons:  {'DKI Insight': 20856, 'Other Insight': 47377, 'Diversity': 179969, 'Different Language': 34619, 'Wrong Assets': 94705, 'Asset Count': 34607}
-
-Processing row:  290000
-Total data rows:  426853
-Total data with DKI:  37976
-Total data with Insight:  127466
-Rejected reasons:  {'DKI Insight': 21565, 'Other Insight': 49085, 'Diversity': 186400, 'Different Language': 35792, 'Wrong Assets': 98119, 'Asset Count': 35892}
-
-Processing row:  300000
-Total data rows:  441426
-Total data with DKI:  39230
-Total data with Insight:  131832
-Rejected reasons:  {'DKI Insight': 22289, 'Other Insight': 50766, 'Diversity': 192749, 'Different Language': 37000, 'Wrong Assets': 101482, 'Asset Count': 37140}
-
-Processing row:  310000
-Total data rows:  456199
-Total data with DKI:  40544
-Total data with Insight:  136244
-Rejected reasons:  {'DKI Insight': 23062, 'Other Insight': 52462, 'Diversity': 199105, 'Different Language': 38240, 'Wrong Assets': 104994, 'Asset Count': 38336}
-
-Processing row:  320000
-Total data rows:  470782
-Total data with DKI:  41776
-Total data with Insight:  140550
-Rejected reasons:  {'DKI Insight': 23740, 'Other Insight': 54141, 'Diversity': 205464, 'Different Language': 39504, 'Wrong Assets': 108374, 'Asset Count': 39559}
-
-Processing row:  330000
-Total data rows:  485521
-Total data with DKI:  43095
-Total data with Insight:  144964
-Rejected reasons:  {'DKI Insight': 24503, 'Other Insight': 55781, 'Diversity': 211794, 'Different Language': 40768, 'Wrong Assets': 111890, 'Asset Count': 40785}
-
-Processing row:  340000
-Total data rows:  500291
-Total data with DKI:  44420
-Total data with Insight:  149362
-Rejected reasons:  {'DKI Insight': 25257, 'Other Insight': 57471, 'Diversity': 218198, 'Different Language': 41998, 'Wrong Assets': 115391, 'Asset Count': 41976}
-
-Processing row:  350000
-Total data rows:  514922
-Total data with DKI:  45701
-Total data with Insight:  153676
-Rejected reasons:  {'DKI Insight': 26008, 'Other Insight': 59182, 'Diversity': 224698, 'Different Language': 43101, 'Wrong Assets': 118723, 'Asset Count': 43210}
-
-Processing row:  360000
-Total data rows:  529708
-Total data with DKI:  47047
-Total data with Insight:  158083
-Rejected reasons:  {'DKI Insight': 26773, 'Other Insight': 60850, 'Diversity': 231134, 'Different Language': 44307, 'Wrong Assets': 122138, 'Asset Count': 44506}
-
-Processing row:  370000
-Total data rows:  544312
-Total data with DKI:  48362
-Total data with Insight:  162366
-Rejected reasons:  {'DKI Insight': 27522, 'Other Insight': 62478, 'Diversity': 237608, 'Different Language': 45530, 'Wrong Assets': 125498, 'Asset Count': 45676}
-
-Processing row:  380000
-Total data rows:  558973
-Total data with DKI:  49653
-Total data with Insight:  166720
-Rejected reasons:  {'DKI Insight': 28257, 'Other Insight': 64211, 'Diversity': 244080, 'Different Language': 46733, 'Wrong Assets': 128790, 'Asset Count': 46902}
-
-Processing row:  390000
-Total data rows:  573578
-Total data with DKI:  50915
-Total data with Insight:  171093
-Rejected reasons:  {'DKI Insight': 28940, 'Other Insight': 65871, 'Diversity': 250427, 'Different Language': 47970, 'Wrong Assets': 132234, 'Asset Count': 48136}
-
-Processing row:  400000
-Total data rows:  588195
-Total data with DKI:  52210
-Total data with Insight:  175445
-Rejected reasons:  {'DKI Insight': 29650, 'Other Insight': 67583, 'Diversity': 256768, 'Different Language': 49199, 'Wrong Assets': 135611, 'Asset Count': 49384}
-
-Processing row:  410000
-Total data rows:  603016
-Total data with DKI:  53569
-Total data with Insight:  179866
-Rejected reasons:  {'DKI Insight': 30439, 'Other Insight': 69285, 'Diversity': 263155, 'Different Language': 50471, 'Wrong Assets': 139031, 'Asset Count': 50635}
-
-Processing row:  420000
-Total data rows:  617876
-Total data with DKI:  54843
-Total data with Insight:  184382
-Rejected reasons:  {'DKI Insight': 31164, 'Other Insight': 71002, 'Diversity': 269643, 'Different Language': 51738, 'Wrong Assets': 142449, 'Asset Count': 51880}
-
-Processing row:  430000
-Total data rows:  632585
-Total data with DKI:  56175
-Total data with Insight:  188788
-Rejected reasons:  {'DKI Insight': 31899, 'Other Insight': 72768, 'Diversity': 276018, 'Different Language': 52973, 'Wrong Assets': 145817, 'Asset Count': 53110}
-
-Processing row:  440000
-Total data rows:  647278
-Total data with DKI:  57498
-Total data with Insight:  193148
-Rejected reasons:  {'DKI Insight': 32650, 'Other Insight': 74467, 'Diversity': 282441, 'Different Language': 54178, 'Wrong Assets': 149193, 'Asset Count': 54349}
-
-Processing row:  450000
-Total data rows:  662003
-Total data with DKI:  58800
-Total data with Insight:  197563
-Rejected reasons:  {'DKI Insight': 33373, 'Other Insight': 76152, 'Diversity': 288808, 'Different Language': 55424, 'Wrong Assets': 152582, 'Asset Count': 55664}
-
-Processing row:  460000
-Total data rows:  676588
-Total data with DKI:  60062
-Total data with Insight:  201862
-Rejected reasons:  {'DKI Insight': 34083, 'Other Insight': 77883, 'Diversity': 295180, 'Different Language': 56615, 'Wrong Assets': 155963, 'Asset Count': 56864}
-
-Processing row:  470000
-Total data rows:  691314
-Total data with DKI:  61323
-Total data with Insight:  206291
-Rejected reasons:  {'DKI Insight': 34786, 'Other Insight': 79636, 'Diversity': 301695, 'Different Language': 57823, 'Wrong Assets': 159332, 'Asset Count': 58042}
-
-Processing row:  480000
-Total data rows:  706045
-Total data with DKI:  62651
-Total data with Insight:  210677
-Rejected reasons:  {'DKI Insight': 35532, 'Other Insight': 81319, 'Diversity': 308147, 'Different Language': 59053, 'Wrong Assets': 162751, 'Asset Count': 59243}
-
-Processing row:  490000
-Total data rows:  720728
-Total data with DKI:  63950
-Total data with Insight:  215052
-Rejected reasons:  {'DKI Insight': 36274, 'Other Insight': 83026, 'Diversity': 314490, 'Different Language': 60286, 'Wrong Assets': 166166, 'Asset Count': 60486}
-
-Processing row:  500000
-Total data rows:  735356
-Total data with DKI:  65163
-Total data with Insight:  219429
-Rejected reasons:  {'DKI Insight': 36955, 'Other Insight': 84719, 'Diversity': 320868, 'Different Language': 61487, 'Wrong Assets': 169597, 'Asset Count': 61730}
-
-Processing row:  510000
-Total data rows:  750040
-Total data with DKI:  66520
-Total data with Insight:  223746
-Rejected reasons:  {'DKI Insight': 37737, 'Other Insight': 86365, 'Diversity': 327336, 'Different Language': 62769, 'Wrong Assets': 172933, 'Asset Count': 62900}
-
-Processing row:  520000
-Total data rows:  764680
-Total data with DKI:  67845
-Total data with Insight:  228006
-Rejected reasons:  {'DKI Insight': 38514, 'Other Insight': 88014, 'Diversity': 333764, 'Different Language': 63985, 'Wrong Assets': 176247, 'Asset Count': 64156}
-
-Processing row:  530000
-Total data rows:  779363
-Total data with DKI:  69140
-Total data with Insight:  232374
-Rejected reasons:  {'DKI Insight': 39261, 'Other Insight': 89683, 'Diversity': 340232, 'Different Language': 65227, 'Wrong Assets': 179546, 'Asset Count': 65414}
-
-Processing row:  540000
-Total data rows:  794006
-Total data with DKI:  70469
-Total data with Insight:  236683
-Rejected reasons:  {'DKI Insight': 39994, 'Other Insight': 91397, 'Diversity': 346690, 'Different Language': 66466, 'Wrong Assets': 182867, 'Asset Count': 66592}
-
-Processing row:  550000
-Total data rows:  808924
-Total data with DKI:  71833
-Total data with Insight:  241164
-Rejected reasons:  {'DKI Insight': 40741, 'Other Insight': 93142, 'Diversity': 353225, 'Different Language': 67737, 'Wrong Assets': 186251, 'Asset Count': 67828}
-
-Processing row:  560000
-Total data rows:  823742
-Total data with DKI:  73203
-Total data with Insight:  245583
-Rejected reasons:  {'DKI Insight': 41530, 'Other Insight': 94851, 'Diversity': 359639, 'Different Language': 68955, 'Wrong Assets': 189703, 'Asset Count': 69064}
-
-Processing row:  570000
-Total data rows:  838548
-Total data with DKI:  74518
-Total data with Insight:  250079
-Rejected reasons:  {'DKI Insight': 42278, 'Other Insight': 96553, 'Diversity': 366113, 'Different Language': 70132, 'Wrong Assets': 193141, 'Asset Count': 70331}
-
-Processing row:  580000
-Total data rows:  853244
-Total data with DKI:  75811
-Total data with Insight:  254486
-Rejected reasons:  {'DKI Insight': 43034, 'Other Insight': 98245, 'Diversity': 372556, 'Different Language': 71393, 'Wrong Assets': 196506, 'Asset Count': 71510}
-
-Processing row:  590000
-Total data rows:  867960
-Total data with DKI:  77110
-Total data with Insight:  258875
-Rejected reasons:  {'DKI Insight': 43759, 'Other Insight': 99979, 'Diversity': 378941, 'Different Language': 72622, 'Wrong Assets': 199934, 'Asset Count': 72725}
-
-Processing row:  600000
-Total data rows:  882681
-Total data with DKI:  78370
-Total data with Insight:  263273
-Rejected reasons:  {'DKI Insight': 44475, 'Other Insight': 101667, 'Diversity': 385434, 'Different Language': 73818, 'Wrong Assets': 203325, 'Asset Count': 73962}
-
-Processing row:  610000
-Total data rows:  897194
-Total data with DKI:  79613
-Total data with Insight:  267522
-Rejected reasons:  {'DKI Insight': 45177, 'Other Insight': 103316, 'Diversity': 391741, 'Different Language': 75100, 'Wrong Assets': 206704, 'Asset Count': 75156}
-
-Processing row:  620000
-Total data rows:  911958
-Total data with DKI:  80947
-Total data with Insight:  271957
-Rejected reasons:  {'DKI Insight': 45945, 'Other Insight': 105026, 'Diversity': 398113, 'Different Language': 76324, 'Wrong Assets': 210146, 'Asset Count': 76404}
-
-Processing row:  630000
-Total data rows:  926620
-Total data with DKI:  82241
-Total data with Insight:  276302
-Rejected reasons:  {'DKI Insight': 46641, 'Other Insight': 106692, 'Diversity': 404508, 'Different Language': 77580, 'Wrong Assets': 213577, 'Asset Count': 77622}
-
-Processing row:  640000
-Total data rows:  941326
-Total data with DKI:  83492
-Total data with Insight:  280765
-Rejected reasons:  {'DKI Insight': 47385, 'Other Insight': 108393, 'Diversity': 410950, 'Different Language': 78821, 'Wrong Assets': 216949, 'Asset Count': 78828}
-
-Processing row:  650000
-Total data rows:  956080
-Total data with DKI:  84832
-Total data with Insight:  285156
-Rejected reasons:  {'DKI Insight': 48149, 'Other Insight': 110075, 'Diversity': 417345, 'Different Language': 80050, 'Wrong Assets': 220417, 'Asset Count': 80044}
-
-Processing row:  660000
-Total data rows:  970781
-Total data with DKI:  86132
-Total data with Insight:  289578
-Rejected reasons:  {'DKI Insight': 48878, 'Other Insight': 111801, 'Diversity': 423712, 'Different Language': 81300, 'Wrong Assets': 223827, 'Asset Count': 81263}
-
-Processing row:  670000
-Total data rows:  985574
-Total data with DKI:  87420
-Total data with Insight:  294036
-Rejected reasons:  {'DKI Insight': 49621, 'Other Insight': 113498, 'Diversity': 430210, 'Different Language': 82579, 'Wrong Assets': 227194, 'Asset Count': 82472}
-
-Processing row:  680000
-Total data rows:  1000186
-Total data with DKI:  88650
-Total data with Insight:  298420
-Rejected reasons:  {'DKI Insight': 50302, 'Other Insight': 115222, 'Diversity': 436697, 'Different Language': 83757, 'Wrong Assets': 230534, 'Asset Count': 83674}
-
-Processing row:  690000
-Total data rows:  1014950
-Total data with DKI:  89962
-Total data with Insight:  302854
-Rejected reasons:  {'DKI Insight': 51004, 'Other Insight': 116993, 'Diversity': 443119, 'Different Language': 84977, 'Wrong Assets': 234004, 'Asset Count': 84853}
-
-Processing row:  700000
-Total data rows:  1029677
-Total data with DKI:  91287
-Total data with Insight:  307232
-Rejected reasons:  {'DKI Insight': 51751, 'Other Insight': 118664, 'Diversity': 449534, 'Different Language': 86188, 'Wrong Assets': 237430, 'Asset Count': 86110}
-
-Processing row:  710000
-Total data rows:  1044377
-Total data with DKI:  92580
-Total data with Insight:  311635
-Rejected reasons:  {'DKI Insight': 52492, 'Other Insight': 120384, 'Diversity': 455968, 'Different Language': 87429, 'Wrong Assets': 240725, 'Asset Count': 87379}
-
-Processing row:  720000
-Total data rows:  1059044
-Total data with DKI:  93859
-Total data with Insight:  315979
-Rejected reasons:  {'DKI Insight': 53225, 'Other Insight': 122044, 'Diversity': 462415, 'Different Language': 88620, 'Wrong Assets': 244129, 'Asset Count': 88611}
-
-Processing row:  730000
-Total data rows:  1073744
-Total data with DKI:  95138
-Total data with Insight:  320353
-Rejected reasons:  {'DKI Insight': 53985, 'Other Insight': 123743, 'Diversity': 468848, 'Different Language': 89820, 'Wrong Assets': 247549, 'Asset Count': 89799}
-
-Processing row:  740000
-Total data rows:  1088459
-Total data with DKI:  96412
-Total data with Insight:  324750
-Rejected reasons:  {'DKI Insight': 54684, 'Other Insight': 125457, 'Diversity': 475228, 'Different Language': 91052, 'Wrong Assets': 251012, 'Asset Count': 91026}
-
-Processing row:  750000
-Total data rows:  1103164
-Total data with DKI:  97715
-Total data with Insight:  329114
-Rejected reasons:  {'DKI Insight': 55413, 'Other Insight': 127133, 'Diversity': 481696, 'Different Language': 92267, 'Wrong Assets': 254414, 'Asset Count': 92241}
-
-Processing row:  760000
-Total data rows:  1118032
-Total data with DKI:  99081
-Total data with Insight:  333540
-Rejected reasons:  {'DKI Insight': 56181, 'Other Insight': 128834, 'Diversity': 488129, 'Different Language': 93548, 'Wrong Assets': 257814, 'Asset Count': 93526}
-
-Processing row:  770000
-Total data rows:  1132815
-Total data with DKI:  100425
-Total data with Insight:  337903
-Rejected reasons:  {'DKI Insight': 56896, 'Other Insight': 130493, 'Diversity': 494592, 'Different Language': 94842, 'Wrong Assets': 261256, 'Asset Count': 94736}
-
-Processing row:  780000
-Total data rows:  1147548
-Total data with DKI:  101735
-Total data with Insight:  342246
-Rejected reasons:  {'DKI Insight': 57638, 'Other Insight': 132232, 'Diversity': 501083, 'Different Language': 96091, 'Wrong Assets': 264545, 'Asset Count': 95959}
-
-Processing row:  790000
-Total data rows:  1162184
-Total data with DKI:  103031
-Total data with Insight:  346603
-Rejected reasons:  {'DKI Insight': 58341, 'Other Insight': 133877, 'Diversity': 507503, 'Different Language': 97320, 'Wrong Assets': 267954, 'Asset Count': 97189}
-
-Processing row:  800000
-Total data rows:  1176889
-Total data with DKI:  104350
-Total data with Insight:  350980
-Rejected reasons:  {'DKI Insight': 59079, 'Other Insight': 135541, 'Diversity': 513954, 'Different Language': 98573, 'Wrong Assets': 271326, 'Asset Count': 98416}
-
-Processing row:  810000
-Total data rows:  1191494
-Total data with DKI:  105660
-Total data with Insight:  355302
-Rejected reasons:  {'DKI Insight': 59818, 'Other Insight': 137157, 'Diversity': 520410, 'Different Language': 99771, 'Wrong Assets': 274702, 'Asset Count': 99636}
-
-Processing row:  820000
-Total data rows:  1206027
-Total data with DKI:  106960
-Total data with Insight:  359555
-Rejected reasons:  {'DKI Insight': 60550, 'Other Insight': 138773, 'Diversity': 526807, 'Different Language': 100976, 'Wrong Assets': 278004, 'Asset Count': 100917}
-
-Processing row:  830000
-Total data rows:  1220723
-Total data with DKI:  108287
-Total data with Insight:  363915
-Rejected reasons:  {'DKI Insight': 61288, 'Other Insight': 140484, 'Diversity': 533153, 'Different Language': 102210, 'Wrong Assets': 281415, 'Asset Count': 102173}
-
-Processing row:  840000
-Total data rows:  1235470
-Total data with DKI:  109544
-Total data with Insight:  368388
-Rejected reasons:  {'DKI Insight': 61995, 'Other Insight': 142197, 'Diversity': 539539, 'Different Language': 103458, 'Wrong Assets': 284881, 'Asset Count': 103400}
-
-Total input rows:  841497
-Total data rows for model:  1237675
-Total data with DKI:  109732
-Total data with Insight:  369059
-Rejected reasons:  {'DKI Insight': 62105, 'Other Insight': 142446, 'Diversity': 540499, 'Different Language': 103656, 'Wrong Assets': 285404, 'Asset Count': 103565}
-
-Train data size:  1175791
-Test data size:  61884
+Total data rows:  147226
+Total data with DKI:  13117
+Total data with Insight:  43894
+Rejected reasons:  {'DKI Insight': 2570, 'Other Insight': 8439, 'Diversity': 97859, 'Different Language': 3673, 'Wrong Assets': 30896, 'Asset Count': 3789}
+
+Total input rows:  100001
+Total data rows for model:  147226
+Total data with DKI:  13117
+Total data with Insight:  43894
+Rejected reasons:  {'DKI Insight': 2570, 'Other Insight': 8439, 'Diversity': 97859, 'Different Language': 3673, 'Wrong Assets': 30896, 'Asset Count': 3789}
+
+Train data size:  139864
+Test data size:  7362
 Data generation is done.

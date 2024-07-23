@@ -34,6 +34,16 @@
       "rejected": "rejected"
     }
   },
+  "AssetGeneration_orpo_train_only_diversity": {
+    "file_name": "AssetGeneration/train_orpo_3.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "output",
+      "rejected": "rejected"
+    }
+  },
   "identity": {
     "file_name": "identity.json"
   },

@@ -1,6 +1,7 @@
 ### model
 model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
 #adapter_name_or_path: saves/mistral/fsdp_qlora_sft/
+adapter_name_or_path: saves/mistral/orpo_qlora_continue_3/
 quantization_bit: 4
 
 ### method
@@ -13,7 +14,8 @@ lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj
 ddp_timeout: 180000000
 
 ### dataset
-dataset: AssetGeneration_orpo_train
+#dataset: AssetGeneration_orpo_train
+dataset: AssetGeneration_orpo_train_only_diversity
 template: mistral
 cutoff_len: 1024
 max_samples: 1000000
@@ -21,7 +23,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/orpo_qlora/
+output_dir: saves/mistral/orpo_qlora_continue_3_only_diversity/
 logging_steps: 10
 save_steps: 500
 plot_loss: true
@@ -31,7 +33,7 @@ overwrite_output_dir: true
 per_device_train_batch_size: 12
 gradient_accumulation_steps: 2
 learning_rate: 0.0002
-num_train_epochs: 1.0
+num_train_epochs: 3.0
 lr_scheduler_type: cosine
 warmup_steps: 0.1
 #fp16: true
