@@ -1,10 +1,24 @@
+# Copyright 2024 the LlamaFactory team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 LOCALES = {
     "lang": {
         "en": {
             "label": "Lang",
         },
         "ru": {
-            "label": "Русский",
+            "label": "язык",
         },
         "zh": {
             "label": "语言",
@@ -46,26 +60,15 @@ LOCALES = {
             "label": "微调方法",
         },
     },
-    "adapter_path": {
+    "checkpoint_path": {
         "en": {
-            "label": "Adapter path",
+            "label": "Checkpoint path",
         },
         "ru": {
-            "label": "Путь к адаптеру",
+            "label": "Путь контрольной точки",
         },
         "zh": {
-            "label": "适配器路径",
-        },
-    },
-    "refresh_btn": {
-        "en": {
-            "value": "Refresh adapters",
-        },
-        "ru": {
-            "value": "Обновить адаптеры",
-        },
-        "zh": {
-            "value": "刷新适配器",
+            "label": "检查点路径",
         },
     },
     "advanced_tab": {
@@ -82,15 +85,29 @@ LOCALES = {
     "quantization_bit": {
         "en": {
             "label": "Quantization bit",
-            "info": "Enable 4/8-bit model quantization (QLoRA).",
+            "info": "Enable quantization (QLoRA).",
         },
         "ru": {
             "label": "Уровень квантования",
-            "info": "Включить 4/8-битное квантование модели (QLoRA).",
+            "info": "Включить квантование (QLoRA).",
         },
         "zh": {
             "label": "量化等级",
-            "info": "启用 4/8 比特模型量化（QLoRA）。",
+            "info": "启用量化（QLoRA）。",
+        },
+    },
+    "quantization_method": {
+        "en": {
+            "label": "Quantization method",
+            "info": "Quantization algorithm to use.",
+        },
+        "ru": {
+            "label": "Метод квантования",
+            "info": "Алгоритм квантования, который следует использовать.",
+        },
+        "zh": {
+            "label": "量化方法",
+            "info": "使用的量化算法。",
         },
     },
     "template": {
@@ -477,20 +494,6 @@ LOCALES = {
             "info": "使用的优化器：adamw_torch、adamw_8bit 或 adafactor。",
         },
     },
-    "resize_vocab": {
-        "en": {
-            "label": "Resize token embeddings",
-            "info": "Resize the tokenizer vocab and the embedding layers.",
-        },
-        "ru": {
-            "label": "Изменение размера токенных эмбеддингов",
-            "info": "Изменить размер словаря токенизатора и слоев эмбеддинга.",
-        },
-        "zh": {
-            "label": "更改词表大小",
-            "info": "更改分词器词表和嵌入层的大小。",
-        },
-    },
     "packing": {
         "en": {
             "label": "Pack sequences",
@@ -505,18 +508,60 @@ LOCALES = {
             "info": "将序列打包为等长样本。",
         },
     },
-    "upcast_layernorm": {
+    "neat_packing": {
         "en": {
-            "label": "Upcast LayerNorm",
-            "info": "Upcast weights of layernorm in float32.",
+            "label": "Use neat packing",
+            "info": "Avoid cross-attention between packed sequences.",
         },
         "ru": {
-            "label": "Приведение весов LayerNorm",
-            "info": "Приведение весов LayerNorm к float32.",
+            "label": "Используйте аккуратную упаковку",
+            "info": "избегайте перекрестного внимания между упакованными последовательностями.",
         },
         "zh": {
-            "label": "缩放归一化层",
-            "info": "将归一化层权重缩放至 32 位精度。",
+            "label": "使用无污染打包",
+            "info": "避免打包后的序列产生交叉注意力。",
+        },
+    },
+    "train_on_prompt": {
+        "en": {
+            "label": "Train on prompt",
+            "info": "Disable the label mask on the prompt (only for SFT).",
+        },
+        "ru": {
+            "label": "Тренировка на подсказке",
+            "info": "Отключить маску меток на подсказке (только для SFT).",
+        },
+        "zh": {
+            "label": "学习提示词",
+            "info": "不在提示词的部分添加掩码（仅适用于 SFT）。",
+        },
+    },
+    "mask_history": {
+        "en": {
+            "label": "Mask history",
+            "info": "Train on the last turn only (only for SFT).",
+        },
+        "ru": {
+            "label": "История масок",
+            "info": "Тренироваться только на последнем шаге (только для SFT).",
+        },
+        "zh": {
+            "label": "不学习历史对话",
+            "info": "仅学习最后一轮对话（仅适用于 SFT）。",
+        },
+    },
+    "resize_vocab": {
+        "en": {
+            "label": "Resize token embeddings",
+            "info": "Resize the tokenizer vocab and the embedding layers.",
+        },
+        "ru": {
+            "label": "Изменение размера токенных эмбеддингов",
+            "info": "Изменить размер словаря токенизатора и слоев эмбеддинга.",
+        },
+        "zh": {
+            "label": "更改词表大小",
+            "info": "更改分词器词表和嵌入层的大小。",
         },
     },
     "use_llama_pro": {
@@ -727,6 +772,20 @@ LOCALES = {
         "zh": {
             "label": "使用 DoRA",
             "info": "使用权重分解的 LoRA。",
+        },
+    },
+    "use_pissa": {
+        "en": {
+            "label": "Use PiSSA",
+            "info": "Use PiSSA method.",
+        },
+        "ru": {
+            "label": "используйте PiSSA",
+            "info": "Используйте метод PiSSA.",
+        },
+        "zh": {
+            "label": "使用 PiSSA",
+            "info": "使用 PiSSA 方法。",
         },
     },
     "lora_target": {
@@ -1103,6 +1162,48 @@ LOCALES = {
             "info": "保存训练参数的配置文件路径。",
         },
     },
+    "device_count": {
+        "en": {
+            "label": "Device count",
+            "info": "Number of devices available.",
+        },
+        "ru": {
+            "label": "Количество устройств",
+            "info": "Количество доступных устройств.",
+        },
+        "zh": {
+            "label": "设备数量",
+            "info": "当前可用的运算设备数。",
+        },
+    },
+    "ds_stage": {
+        "en": {
+            "label": "DeepSpeed stage",
+            "info": "DeepSpeed stage for distributed training.",
+        },
+        "ru": {
+            "label": "Этап DeepSpeed",
+            "info": "Этап DeepSpeed для распределенного обучения.",
+        },
+        "zh": {
+            "label": "DeepSpeed stage",
+            "info": "多卡训练的 DeepSpeed stage。",
+        },
+    },
+    "ds_offload": {
+        "en": {
+            "label": "Enable offload",
+            "info": "Enable DeepSpeed offload (slow down training).",
+        },
+        "ru": {
+            "label": "Включить выгрузку",
+            "info": "включить выгрузку DeepSpeed (замедлит обучение).",
+        },
+        "zh": {
+            "label": "使用 offload",
+            "info": "使用 DeepSpeed offload（会减慢速度）。",
+        },
+    },
     "output_box": {
         "en": {
             "value": "Ready.",
@@ -1145,6 +1246,17 @@ LOCALES = {
         },
         "zh": {
             "label": "推理引擎",
+        },
+    },
+    "infer_dtype": {
+        "en": {
+            "label": "Inference data type",
+        },
+        "ru": {
+            "label": "Тип данных для вывода",
+        },
+        "zh": {
+            "label": "推理数据类型",
         },
     },
     "load_btn": {
@@ -1444,6 +1556,11 @@ ALERTS = {
         "ru": "Пожалуйста, выберите адаптер.",
         "zh": "请选择适配器。",
     },
+    "err_no_output_dir": {
+        "en": "Please provide output dir.",
+        "ru": "Пожалуйста, укажите выходную директорию.",
+        "zh": "请填写输出目录。",
+    },
     "err_no_reward_model": {
         "en": "Please select a reward model.",
         "ru": "Пожалуйста, выберите модель вознаграждения.",
@@ -1469,11 +1586,6 @@ ALERTS = {
         "ru": "Обучение недоступно в демонстрационном режиме, сначала скопируйте пространство в частное.",
         "zh": "展示模式不支持训练，请先复制到私人空间。",
     },
-    "err_device_count": {
-        "en": "Multiple GPUs are not supported yet.",
-        "ru": "Пока не поддерживается множественные GPU.",
-        "zh": "尚不支持多 GPU 训练。",
-    },
     "err_tool_name": {
         "en": "Tool name not found.",
         "ru": "Имя инструмента не найдено.",
@@ -1493,6 +1605,11 @@ ALERTS = {
         "en": "CUDA environment was not detected.",
         "ru": "Среда CUDA не обнаружена.",
         "zh": "未检测到 CUDA 环境。",
+    },
+    "warn_output_dir_exists": {
+        "en": "Output dir already exists, will resume training from here.",
+        "ru": "Выходной каталог уже существует, обучение будет продолжено отсюда.",
+        "zh": "输出目录已存在，将从该断点恢复训练。",
     },
     "info_aborting": {
         "en": "Aborted, wait for terminating...",

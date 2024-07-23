@@ -1,13 +1,38 @@
+# Copyright 2024 the LlamaFactory team.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from collections import OrderedDict, defaultdict
 from enum import Enum
 from typing import Dict, Optional
 
+from peft.utils import SAFETENSORS_WEIGHTS_NAME as SAFE_ADAPTER_WEIGHTS_NAME
+from peft.utils import WEIGHTS_NAME as ADAPTER_WEIGHTS_NAME
+from transformers.utils import SAFE_WEIGHTS_INDEX_NAME, SAFE_WEIGHTS_NAME, WEIGHTS_INDEX_NAME, WEIGHTS_NAME
+
+
+CHECKPOINT_NAMES = {
+    SAFE_ADAPTER_WEIGHTS_NAME,
+    ADAPTER_WEIGHTS_NAME,
+    SAFE_WEIGHTS_INDEX_NAME,
+    SAFE_WEIGHTS_NAME,
+    WEIGHTS_INDEX_NAME,
+    WEIGHTS_NAME,
+}
 
 CHOICES = ["A", "B", "C", "D"]
 
 DATA_CONFIG = "dataset_info.json"
-
-DEFAULT_MODULE = defaultdict(str)
 
 DEFAULT_TEMPLATE = defaultdict(str)
 
@@ -22,15 +47,15 @@ FILEEXT2TYPE = {
 
 IGNORE_INDEX = -100
 
-IMAGE_TOKEN = "<image>"
-
 LAYERNORM_NAMES = {"norm", "ln"}
+
+LLAMABOARD_CONFIG = "llamaboard_config.yaml"
 
 METHODS = ["full", "freeze", "lora"]
 
-MOD_SUPPORTED_MODELS = ["bloom", "falcon", "gemma", "llama", "mistral", "mixtral", "phi", "starcoder2"]
+MOD_SUPPORTED_MODELS = {"bloom", "falcon", "gemma", "llama", "mistral", "mixtral", "phi", "starcoder2"}
 
-PEFT_METHODS = ["lora"]
+PEFT_METHODS = {"lora"}
 
 RUNNING_LOG = "running_log.txt"
 
@@ -38,9 +63,9 @@ SUBJECTS = ["Average", "STEM", "Social Sciences", "Humanities", "Other"]
 
 SUPPORTED_MODELS = OrderedDict()
 
-TRAINER_CONFIG = "trainer_config.yaml"
-
 TRAINER_LOG = "trainer_log.jsonl"
+
+TRAINING_ARGS = "training_args.yaml"
 
 TRAINING_STAGES = {
     "Supervised Fine-Tuning": "sft",
@@ -48,13 +73,25 @@ TRAINING_STAGES = {
     "PPO": "ppo",
     "DPO": "dpo",
     "KTO": "kto",
-    "ORPO": "orpo",
     "Pre-Training": "pt",
 }
 
-STAGES_USE_PAIR_DATA = ["rm", "dpo", "orpo"]
+STAGES_USE_PAIR_DATA = {"rm", "dpo"}
 
-SUPPORTED_CLASS_FOR_S2ATTN = ["llama"]
+SUPPORTED_CLASS_FOR_BLOCK_DIAG_ATTN = {
+    "cohere",
+    "falcon",
+    "gemma",
+    "gemma2",
+    "llama",
+    "mistral",
+    "phi",
+    "phi3",
+    "qwen2",
+    "starcoder2",
+}
+
+SUPPORTED_CLASS_FOR_S2ATTN = {"llama"}
 
 V_HEAD_WEIGHTS_NAME = "value_head.bin"
 
@@ -70,7 +107,6 @@ class DownloadSource(str, Enum):
 
 def register_model_group(
     models: Dict[str, Dict[DownloadSource, str]],
-    module: Optional[str] = None,
     template: Optional[str] = None,
     vision: bool = False,
 ) -> None:
@@ -81,12 +117,23 @@ def register_model_group(
         else:
             assert prefix == name.split("-")[0], "prefix should be identical."
         SUPPORTED_MODELS[name] = path
-    if module is not None:
-        DEFAULT_MODULE[prefix] = module
     if template is not None:
         DEFAULT_TEMPLATE[prefix] = template
     if vision:
         VISION_MODELS.add(prefix)
+
+
+register_model_group(
+    models={
+        "Aya-23-8B-Chat": {
+            DownloadSource.DEFAULT: "CohereForAI/aya-23-8B",
+        },
+        "Aya-23-35B-Chat": {
+            DownloadSource.DEFAULT: "CohereForAI/aya-23-35B",
+        },
+    },
+    template="cohere",
+)
 
 
 register_model_group(
@@ -104,7 +151,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "baichuan-inc/Baichuan-13B-Chat",
         },
     },
-    module="W_pack",
     template="baichuan",
 )
 
@@ -128,7 +174,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "baichuan-inc/Baichuan2-13B-Chat",
         },
     },
-    module="W_pack",
     template="baichuan2",
 )
 
@@ -148,7 +193,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "AI-ModelScope/bloom-7b1",
         },
     },
-    module="query_key_value",
 )
 
 
@@ -167,7 +211,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "AI-ModelScope/bloomz-7b1-mt",
         },
     },
-    module="query_key_value",
 )
 
 
@@ -206,7 +249,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "ZhipuAI/chatglm2-6b",
         }
     },
-    module="query_key_value",
     template="chatglm2",
 )
 
@@ -222,7 +264,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "ZhipuAI/chatglm3-6b",
         },
     },
-    module="query_key_value",
     template="chatglm3",
 )
 
@@ -260,6 +301,47 @@ register_model_group(
 
 register_model_group(
     models={
+        "CodeGeeX4-9B-Chat": {
+            DownloadSource.DEFAULT: "THUDM/codegeex4-all-9b",
+            DownloadSource.MODELSCOPE: "ZhipuAI/codegeex4-all-9b",
+        },
+    },
+    template="codegeex4",
+)
+
+
+register_model_group(
+    models={
+        "CodeGemma-7B": {
+            DownloadSource.DEFAULT: "google/codegemma-7b",
+        },
+        "CodeGemma-7B-Chat": {
+            DownloadSource.DEFAULT: "google/codegemma-7b-it",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/codegemma-7b-it",
+        },
+        "CodeGemma-1.1-2B": {
+            DownloadSource.DEFAULT: "google/codegemma-1.1-2b",
+        },
+        "CodeGemma-1.1-7B-Chat": {
+            DownloadSource.DEFAULT: "google/codegemma-1.1-7b-it",
+        },
+    },
+    template="gemma",
+)
+
+
+register_model_group(
+    models={
+        "Codestral-22B-v0.1-Chat": {
+            DownloadSource.DEFAULT: "mistralai/Codestral-22B-v0.1",
+        },
+    },
+    template="mistral",
+)
+
+
+register_model_group(
+    models={
         "CommandR-35B-Chat": {
             DownloadSource.DEFAULT: "CohereForAI/c4ai-command-r-v01",
             DownloadSource.MODELSCOPE: "AI-ModelScope/c4ai-command-r-v01",
@@ -291,7 +373,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "AI-ModelScope/dbrx-instruct",
         },
     },
-    module="Wqkv",
     template="dbrx",
 )
 
@@ -328,6 +409,7 @@ register_model_group(
         },
         "DeepSeek-MoE-16B-v2-Base": {
             DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-V2-Lite",
+            DownloadSource.MODELSCOPE: "deepseek-ai/DeepSeek-V2-Lite",
         },
         "DeepSeek-MoE-236B-Base": {
             DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-V2",
@@ -339,10 +421,23 @@ register_model_group(
         },
         "DeepSeek-MoE-16B-v2-Chat": {
             DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-V2-Lite-Chat",
+            DownloadSource.MODELSCOPE: "deepseek-ai/DeepSeek-V2-Lite-Chat",
         },
         "DeepSeek-MoE-236B-Chat": {
             DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-V2-Chat",
             DownloadSource.MODELSCOPE: "deepseek-ai/DeepSeek-V2-Chat",
+        },
+        "DeepSeek-MoE-Coder-16B-Base": {
+            DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-Coder-V2-Lite-Base",
+        },
+        "DeepSeek-MoE-Coder-236B-Base": {
+            DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-Coder-V2-Base",
+        },
+        "DeepSeek-MoE-Coder-16B-Chat": {
+            DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
+        },
+        "DeepSeek-MoE-Coder-236B-Chat": {
+            DownloadSource.DEFAULT: "deepseek-ai/DeepSeek-Coder-V2-Instruct",
         },
     },
     template="deepseek",
@@ -408,7 +503,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "modelscope/falcon-180B-chat",
         },
     },
-    module="query_key_value",
     template="falcon",
 )
 
@@ -431,6 +525,28 @@ register_model_group(
             DownloadSource.DEFAULT: "google/gemma-7b-it",
             DownloadSource.MODELSCOPE: "AI-ModelScope/gemma-7b-it",
         },
+        "Gemma-1.1-2B-Chat": {
+            DownloadSource.DEFAULT: "google/gemma-1.1-2b-it",
+        },
+        "Gemma-1.1-7B-Chat": {
+            DownloadSource.DEFAULT: "google/gemma-1.1-7b-it",
+        },
+        "Gemma-2-9B": {
+            DownloadSource.DEFAULT: "google/gemma-2-9b",
+            DownloadSource.MODELSCOPE: "LLM-Research/gemma-2-9b",
+        },
+        "Gemma-2-27B": {
+            DownloadSource.DEFAULT: "google/gemma-2-27b",
+            DownloadSource.MODELSCOPE: "LLM-Research/gemma-2-27b",
+        },
+        "Gemma-2-9B-Chat": {
+            DownloadSource.DEFAULT: "google/gemma-2-9b-it",
+            DownloadSource.MODELSCOPE: "LLM-Research/gemma-2-9b-it",
+        },
+        "Gemma-2-27B-Chat": {
+            DownloadSource.DEFAULT: "google/gemma-2-27b-it",
+            DownloadSource.MODELSCOPE: "LLM-Research/gemma-2-27b-it",
+        },
     },
     template="gemma",
 )
@@ -438,18 +554,20 @@ register_model_group(
 
 register_model_group(
     models={
-        "CodeGemma-2B": {
-            DownloadSource.DEFAULT: "google/codegemma-1.1-2b",
+        "GLM-4-9B": {
+            DownloadSource.DEFAULT: "THUDM/glm-4-9b",
+            DownloadSource.MODELSCOPE: "ZhipuAI/glm-4-9b",
         },
-        "CodeGemma-7B": {
-            DownloadSource.DEFAULT: "google/codegemma-7b",
+        "GLM-4-9B-Chat": {
+            DownloadSource.DEFAULT: "THUDM/glm-4-9b-chat",
+            DownloadSource.MODELSCOPE: "ZhipuAI/glm-4-9b-chat",
         },
-        "CodeGemma-7B-Chat": {
-            DownloadSource.DEFAULT: "google/codegemma-1.1-7b-it",
-            DownloadSource.MODELSCOPE: "AI-ModelScope/codegemma-7b-it",
+        "GLM-4-9B-1M-Chat": {
+            DownloadSource.DEFAULT: "THUDM/glm-4-9b-chat-1m",
+            DownloadSource.MODELSCOPE: "ZhipuAI/glm-4-9b-chat-1m",
         },
     },
-    template="gemma",
+    template="glm4",
 )
 
 
@@ -495,14 +613,32 @@ register_model_group(
             DownloadSource.MODELSCOPE: "Shanghai_AI_Laboratory/internlm2-chat-20b",
         },
     },
-    module="wqkv",
     template="intern2",
 )
 
 
 register_model_group(
     models={
-        "Jambda-v0.1": {
+        "InternLM2.5-7B": {
+            DownloadSource.DEFAULT: "internlm/internlm2_5-7b",
+            DownloadSource.MODELSCOPE: "Shanghai_AI_Laboratory/internlm2_5-7b",
+        },
+        "InternLM2.5-7B-Chat": {
+            DownloadSource.DEFAULT: "internlm/internlm2_5-7b-chat",
+            DownloadSource.MODELSCOPE: "Shanghai_AI_Laboratory/internlm2_5-7b-chat",
+        },
+        "InternLM2.5-7B-1M-Chat": {
+            DownloadSource.DEFAULT: "internlm/internlm2_5-7b-chat-1m",
+            DownloadSource.MODELSCOPE: "Shanghai_AI_Laboratory/internlm2_5-7b-chat-1m",
+        },
+    },
+    template="intern2",
+)
+
+
+register_model_group(
+    models={
+        "Jamba-v0.1": {
             DownloadSource.DEFAULT: "ai21labs/Jamba-v0.1",
             DownloadSource.MODELSCOPE: "AI-ModelScope/Jamba-v0.1",
         }
@@ -517,7 +653,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "DeepLang/LingoWhale-8B",
         }
     },
-    module="qkv_proj",
 )
 
 
@@ -620,6 +755,21 @@ register_model_group(
 
 register_model_group(
     models={
+        "MiniCPM-2B-SFT-Chat": {
+            DownloadSource.DEFAULT: "openbmb/MiniCPM-2B-sft-bf16",
+            DownloadSource.MODELSCOPE: "OpenBMB/miniCPM-bf16",
+        },
+        "MiniCPM-2B-DPO-Chat": {
+            DownloadSource.DEFAULT: "openbmb/MiniCPM-2B-dpo-bf16",
+            DownloadSource.MODELSCOPE: "OpenBMB/MiniCPM-2B-dpo-bf16",
+        },
+    },
+    template="cpm",
+)
+
+
+register_model_group(
+    models={
         "Mistral-7B-v0.1": {
             DownloadSource.DEFAULT: "mistralai/Mistral-7B-v0.1",
             DownloadSource.MODELSCOPE: "AI-ModelScope/Mistral-7B-v0.1",
@@ -635,6 +785,12 @@ register_model_group(
         "Mistral-7B-v0.2-Chat": {
             DownloadSource.DEFAULT: "mistralai/Mistral-7B-Instruct-v0.2",
             DownloadSource.MODELSCOPE: "AI-ModelScope/Mistral-7B-Instruct-v0.2",
+        },
+        "Mistral-7B-v0.3": {
+            DownloadSource.DEFAULT: "mistralai/Mistral-7B-v0.3",
+        },
+        "Mistral-7B-v0.3-Chat": {
+            DownloadSource.DEFAULT: "mistralai/Mistral-7B-Instruct-v0.3",
         },
     },
     template="mistral",
@@ -657,6 +813,7 @@ register_model_group(
         },
         "Mixtral-8x22B-v0.1-Chat": {
             DownloadSource.DEFAULT: "mistralai/Mixtral-8x22B-Instruct-v0.1",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/Mixtral-8x22B-Instruct-v0.1",
         },
     },
     template="mistral",
@@ -670,6 +827,9 @@ register_model_group(
         },
         "OLMo-7B": {
             DownloadSource.DEFAULT: "allenai/OLMo-7B-hf",
+        },
+        "OLMo-7B-Chat": {
+            DownloadSource.DEFAULT: "ssec-uw/OLMo-7B-Instruct-hf",
         },
         "OLMo-1.7-7B": {
             DownloadSource.DEFAULT: "allenai/OLMo-1.7-7B-hf",
@@ -686,6 +846,16 @@ register_model_group(
         }
     },
     template="openchat",
+)
+
+
+register_model_group(
+    models={
+        "OpenChat3.6-8B-Chat": {
+            DownloadSource.DEFAULT: "openchat/openchat-3.6-8b-20240522",
+        }
+    },
+    template="openchat-3.6",
 )
 
 
@@ -720,18 +890,23 @@ register_model_group(
     models={
         "PaliGemma-3B-pt-224": {
             DownloadSource.DEFAULT: "google/paligemma-3b-pt-224",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/paligemma-3b-pt-224",
         },
         "PaliGemma-3B-pt-448": {
             DownloadSource.DEFAULT: "google/paligemma-3b-pt-448",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/paligemma-3b-pt-448",
         },
         "PaliGemma-3B-pt-896": {
             DownloadSource.DEFAULT: "google/paligemma-3b-pt-896",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/paligemma-3b-pt-896",
         },
         "PaliGemma-3B-mix-224": {
             DownloadSource.DEFAULT: "google/paligemma-3b-mix-224",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/paligemma-3b-mix-224",
         },
         "PaliGemma-3B-mix-448": {
             DownloadSource.DEFAULT: "google/paligemma-3b-mix-448",
+            DownloadSource.MODELSCOPE: "AI-ModelScope/paligemma-3b-mix-448",
         },
     },
     vision=True,
@@ -754,16 +929,31 @@ register_model_group(
 
 register_model_group(
     models={
-        "Phi3-3.8B-4k-Chat": {
+        "Phi3-4B-4k-Chat": {
             DownloadSource.DEFAULT: "microsoft/Phi-3-mini-4k-instruct",
             DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-mini-4k-instruct",
         },
-        "Phi3-3.8B-128k-Chat": {
+        "Phi3-4B-128k-Chat": {
             DownloadSource.DEFAULT: "microsoft/Phi-3-mini-128k-instruct",
             DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-mini-128k-instruct",
         },
+        "Phi3-7B-8k-Chat": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-small-8k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-8k-instruct",
+        },
+        "Phi3-7B-128k-Chat": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-small-128k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-small-128k-instruct",
+        },
+        "Phi3-14B-8k-Chat": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-medium-4k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-medium-4k-instruct",
+        },
+        "Phi3-14B-128k-Chat": {
+            DownloadSource.DEFAULT: "microsoft/Phi-3-medium-128k-instruct",
+            DownloadSource.MODELSCOPE: "LLM-Research/Phi-3-medium-128k-instruct",
+        },
     },
-    module="qkv_proj",
     template="phi",
 )
 
@@ -835,7 +1025,6 @@ register_model_group(
             DownloadSource.MODELSCOPE: "qwen/Qwen-72B-Chat-Int4",
         },
     },
-    module="c_attn",
     template="qwen",
 )
 
@@ -993,6 +1182,89 @@ register_model_group(
 
 register_model_group(
     models={
+        "Qwen2-0.5B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-0.5B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-0.5B",
+        },
+        "Qwen2-1.5B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-1.5B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-1.5B",
+        },
+        "Qwen2-7B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-7B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-7B",
+        },
+        "Qwen2-72B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-72B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-72B",
+        },
+        "Qwen2-MoE-57B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-57B-A14B",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-57B-A14B",
+        },
+        "Qwen2-0.5B-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-0.5B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-0.5B-Instruct",
+        },
+        "Qwen2-1.5B-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-1.5B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-1.5B-Instruct",
+        },
+        "Qwen2-7B-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-7B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-7B-Instruct",
+        },
+        "Qwen2-72B-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-72B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-72B-Instruct",
+        },
+        "Qwen2-MoE-57B-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-57B-A14B-Instruct",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-57B-A14B-Instruct",
+        },
+        "Qwen2-0.5B-int8-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-0.5B-Instruct-GPTQ-Int8",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-0.5B-Instruct-GPTQ-Int8",
+        },
+        "Qwen2-0.5B-int4-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-0.5B-Instruct-AWQ",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-0.5B-Instruct-AWQ",
+        },
+        "Qwen2-1.5B-int8-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-1.5B-Instruct-GPTQ-Int8",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-1.5B-Instruct-GPTQ-Int8",
+        },
+        "Qwen2-1.5B-int4-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-1.5B-Instruct-AWQ",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-1.5B-Instruct-AWQ",
+        },
+        "Qwen2-7B-int8-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-7B-Instruct-GPTQ-Int8",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-7B-Instruct-GPTQ-Int8",
+        },
+        "Qwen2-7B-int4-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-7B-Instruct-AWQ",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-7B-Instruct-AWQ",
+        },
+        "Qwen2-72B-int8-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-72B-Instruct-GPTQ-Int8",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-72B-Instruct-GPTQ-Int8",
+        },
+        "Qwen2-72B-int4-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-72B-Instruct-AWQ",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-72B-Instruct-AWQ",
+        },
+        "Qwen2-MoE-57B-int4-Chat": {
+            DownloadSource.DEFAULT: "Qwen/Qwen2-57B-A14B-Instruct-GPTQ-Int4",
+            DownloadSource.MODELSCOPE: "qwen/Qwen2-57B-A14B-Instruct-GPTQ-Int4",
+        },
+    },
+    template="qwen",
+)
+
+
+register_model_group(
+    models={
         "SOLAR-10.7B": {
             DownloadSource.DEFAULT: "upstage/SOLAR-10.7B-v1.0",
         },
@@ -1030,6 +1302,29 @@ register_model_group(
             DownloadSource.MODELSCOPE: "AI-ModelScope/starcoder2-15b",
         },
     }
+)
+
+
+register_model_group(
+    models={
+        "TeleChat-1B-Chat": {
+            DownloadSource.DEFAULT: "Tele-AI/TeleChat-1B",
+            DownloadSource.MODELSCOPE: "TeleAI/TeleChat-1B",
+        },
+        "TeleChat-7B-Chat": {
+            DownloadSource.DEFAULT: "Tele-AI/telechat-7B",
+            DownloadSource.MODELSCOPE: "TeleAI/telechat-7B",
+        },
+        "TeleChat-12B-Chat": {
+            DownloadSource.DEFAULT: "Tele-AI/TeleChat-12B",
+            DownloadSource.MODELSCOPE: "TeleAI/TeleChat-12B",
+        },
+        "TeleChat-12B-v2-Chat": {
+            DownloadSource.DEFAULT: "Tele-AI/TeleChat-12B-v2",
+            DownloadSource.MODELSCOPE: "TeleAI/TeleChat-12B-v2",
+        },
+    },
+    template="telechat",
 )
 
 
