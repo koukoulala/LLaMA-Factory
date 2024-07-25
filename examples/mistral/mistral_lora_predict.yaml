@@ -1,7 +1,7 @@
 ### model
 model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
 #adapter_name_or_path: saves/mistral/orpo_qlora/
-adapter_name_or_path: saves/mistral/orpo_qlora_continue_3
+adapter_name_or_path: saves/mistral/orpo_qlora_continue_3_only_diversity
 #adapter_name_or_path: saves/mistral/fsdp_qlora_sft
 quantization_bit: 4
 
@@ -11,7 +11,7 @@ do_predict: true
 finetuning_type: lora
 
 ### dataset
-dataset: AssetGeneration_test
+eval_dataset: AssetGeneration_test
 #dataset: AssetGeneration_small_test
 template: mistral
 cutoff_len: 1024
@@ -20,9 +20,10 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/orpo_qlora_continue_3/predict/
+output_dir: saves/mistral/orpo_qlora_continue_3_only_diversity/predict/
 overwrite_output_dir: true
 
 ### eval
 per_device_eval_batch_size: 20
 predict_with_generate: true
+ddp_timeout: 180000000
