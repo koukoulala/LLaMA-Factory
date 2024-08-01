@@ -1,8 +1,10 @@
 data/AssetGeneration/*.tsv
 data/AssetGeneration/*.json
-data/AssetGeneration/backup
+data/AssetGeneration/*/*.tsv
+data/AssetGeneration/*/*.json
 ckpts/
 output/
+logs/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

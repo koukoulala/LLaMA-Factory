@@ -1,93 +1,0 @@
-nohup: ignoring input
-[2024-05-27 00:14:49,008] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-05/27/2024 00:14:50 - INFO - llamafactory.hparams.parser - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, compute dtype: None
-[INFO|tokenization_utils_base.py:2106] 2024-05-27 00:14:50,428 >> loading file tokenizer.model
-[INFO|tokenization_utils_base.py:2106] 2024-05-27 00:14:50,428 >> loading file tokenizer.json
-[INFO|tokenization_utils_base.py:2106] 2024-05-27 00:14:50,428 >> loading file added_tokens.json
-[INFO|tokenization_utils_base.py:2106] 2024-05-27 00:14:50,428 >> loading file special_tokens_map.json
-[INFO|tokenization_utils_base.py:2106] 2024-05-27 00:14:50,428 >> loading file tokenizer_config.json
-05/27/2024 00:14:50 - INFO - llamafactory.data.template - Add pad token: </s>
-05/27/2024 00:14:50 - INFO - llamafactory.data.loader - Loading dataset AssetGeneration/test.json...
-Converting format of dataset (num_proc=16):   0%|          | 0/5000 [00:00<?, ? examples/s]Converting format of dataset (num_proc=16): 100%|██████████| 5000/5000 [00:00<00:00, 29988.62 examples/s]
-Running tokenizer on dataset (num_proc=16):   0%|          | 0/5000 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   6%|▋         | 313/5000 [00:00<00:03, 1318.92 examples/s]Running tokenizer on dataset (num_proc=16):  44%|████▍     | 2191/5000 [00:00<00:00, 7758.40 examples/s]Running tokenizer on dataset (num_proc=16):  81%|████████▏ | 4064/5000 [00:00<00:00, 11314.07 examples/s]Running tokenizer on dataset (num_proc=16): 100%|██████████| 5000/5000 [00:00<00:00, 8623.71 examples/s] 
-[INFO|configuration_utils.py:731] 2024-05-27 00:14:51,901 >> loading configuration file /data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2/config.json
-[INFO|configuration_utils.py:796] 2024-05-27 00:14:51,902 >> Model config MistralConfig {
-  "_name_or_path": "/data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2",
-  "architectures": [
-    "MistralForCausalLM"
-  ],
-  "attention_dropout": 0.0,
-  "bos_token_id": 1,
-  "eos_token_id": 2,
-  "hidden_act": "silu",
-  "hidden_size": 4096,
-  "initializer_range": 0.02,
-  "intermediate_size": 14336,
-  "max_position_embeddings": 32768,
-  "model_type": "mistral",
-  "num_attention_heads": 32,
-  "num_hidden_layers": 32,
-  "num_key_value_heads": 8,
-  "rms_norm_eps": 1e-05,
-  "rope_theta": 1000000.0,
-  "sliding_window": null,
-  "tie_word_embeddings": false,
-  "torch_dtype": "bfloat16",
-  "transformers_version": "4.41.0.dev0",
-  "use_cache": true,
-  "vocab_size": 32000
-}
-
-input_ids:
-[1, 28705, 733, 16289, 28793, 5919, 8270, 28705, 28770, 1964, 9655, 1081, 297, 4300, 3842, 28725, 2818, 356, 272, 2296, 1871, 28747, 13, 13, 17500, 5140, 28747, 4449, 1508, 2849, 28723, 20243, 21819, 28723, 675, 28748, 1237, 270, 411, 28748, 3253, 28733, 28708, 469, 262, 28748, 20243, 21819, 28733, 28713, 1881, 21387, 28733, 28719, 1109, 3611, 28705, 13, 12075, 28747, 7132, 21819, 28723, 675, 28705, 13, 9633, 28747, 20214, 1939, 20370, 567, 320, 25655, 1939, 23208, 415, 17244, 28705, 13, 22971, 288, 4068, 28747, 28705, 842, 23208, 19725, 560, 17870, 28725, 7826, 342, 17133, 21819, 3658, 21387, 351, 1109, 3611, 28745, 28705, 842, 17133, 21819, 3658, 21387, 351, 1109, 3611, 28745, 28705, 842, 8610, 4593, 842, 524, 969, 11857, 367, 5904, 28705, 28781, 842, 384, 1802, 28747, 2914, 6005, 842, 12185, 272, 4041, 842, 2236, 357, 3239, 842, 11357, 28712, 3494, 842, 7481, 393, 497, 365, 291, 13917, 842, 7409, 1471, 2047, 28747, 2387, 7481, 842, 22404, 3239, 3663, 1190, 842, 12623, 18748, 842, 5311, 433, 6353, 842, 27970, 15573, 842, 451, 15016, 24556, 28745, 28705, 842, 8784, 842, 320, 1139, 842, 7842, 842, 542, 1726, 842, 401, 373, 842, 10586, 842, 7057, 842, 3217, 842, 3301, 298, 11933, 3231, 842, 27793, 28705, 28740, 15384, 28705, 28770, 28781, 1187, 842, 1343, 28705, 13, 15962, 13063, 28747, 1444, 28705, 28740, 28734, 298, 28705, 28750, 28734, 6128, 28723, 28705, 13, 733, 28748, 16289, 28793]
-inputs:
-<s>  [INST] Please generate 3 Ad Headline in English language, based on the following information:
-
-FinalUrl: https://www.cinemark.com/theatres/tx-austin/cinemark-southpark-meadows 
-Domain: cinemark.com 
-Category: Entertainment -- Events & Tickets -- Movie Theaters 
-LandingPage:  . Movie Theater In Austin, Texas | Cinemark Southpark Meadows;  . Cinemark Southpark Meadows;  . Showtimes . Kung Fu Panda 4 . Dune: Part Two . Arthur the King . Imaginary . Cabrini . Love Lies Bleeding . Bob Marley: One Love . Ordinary Angels . Standard Format . Madame Web . Poor Things . Oppenheimer;  . Today . Tues . Wed . Thurs . Fri . Sat . Sun . Mon . Add to Watch List . PG 1 hr 34 min . De 
-CharacterLimit: between 10 to 20 characters. 
- [/INST]
-05/27/2024 00:14:51 - INFO - llamafactory.model.patcher - Using KV cache for faster generation.
-[INFO|modeling_utils.py:3460] 2024-05-27 00:14:51,921 >> loading weights file /data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2/model.safetensors.index.json
-[INFO|modeling_utils.py:1508] 2024-05-27 00:14:51,921 >> Instantiating MistralForCausalLM model under default dtype torch.bfloat16.
-[INFO|configuration_utils.py:962] 2024-05-27 00:14:51,922 >> Generate config GenerationConfig {
-  "bos_token_id": 1,
-  "eos_token_id": 2
-}
-
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:01<00:02,  1.17s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.14it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.32it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.22it/s]
-[INFO|modeling_utils.py:4269] 2024-05-27 00:14:54,586 >> All model checkpoint weights were used when initializing MistralForCausalLM.
-
-[INFO|modeling_utils.py:4277] 2024-05-27 00:14:54,586 >> All the weights of MistralForCausalLM were initialized from the model checkpoint at /data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2.
-If your task is similar to the task the model of the checkpoint was trained on, you can already use MistralForCausalLM for predictions without further training.
-[INFO|configuration_utils.py:915] 2024-05-27 00:14:54,588 >> loading configuration file /data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2/generation_config.json
-[INFO|configuration_utils.py:962] 2024-05-27 00:14:54,588 >> Generate config GenerationConfig {
-  "bos_token_id": 1,
-  "eos_token_id": 2
-}
-
-05/27/2024 00:14:54 - INFO - llamafactory.model.utils.attention - Using torch SDPA for faster training and inference.
-05/27/2024 00:14:54 - INFO - llamafactory.model.adapter - Upcasting trainable params to float32.
-05/27/2024 00:14:54 - INFO - llamafactory.model.adapter - Fine-tuning method: LoRA
-05/27/2024 00:14:55 - INFO - llamafactory.model.adapter - Merged 1 adapter(s).
-05/27/2024 00:14:55 - INFO - llamafactory.model.adapter - Loaded adapter(s): saves/mistral/qlora_sft_bitsandbytes_small
-05/27/2024 00:14:55 - INFO - llamafactory.model.loader - all params: 7241732096
-[INFO|trainer.py:3719] 2024-05-27 00:14:55,281 >> ***** Running Prediction *****
-[INFO|trainer.py:3721] 2024-05-27 00:14:55,281 >>   Num examples = 5000
-[INFO|trainer.py:3724] 2024-05-27 00:14:55,281 >>   Batch size = 28
-  0%|          | 0/179 [00:00<?, ?it/s]  1%|          | 2/179 [00:20<30:13, 10.24s/it]  2%|▏         | 3/179 [00:34<35:10, 11.99s/it]  2%|▏         | 4/179 [00:53<42:33, 14.59s/it]  3%|▎         | 5/179 [01:09<43:08, 14.88s/it]  3%|▎         | 6/179 [01:21<40:43, 14.12s/it]  4%|▍         | 7/179 [01:38<43:09, 15.06s/it]  4%|▍         | 8/179 [01:50<39:33, 13.88s/it]  5%|▌         | 9/179 [02:03<38:42, 13.66s/it]  6%|▌         | 10/179 [02:17<38:57, 13.83s/it]  6%|▌         | 11/179 [02:39<45:28, 16.24s/it]  7%|▋         | 12/179 [02:54<43:53, 15.77s/it]  7%|▋         | 13/179 [03:16<48:52, 17.66s/it]  8%|▊         | 14/179 [03:30<45:50, 16.67s/it]  8%|▊         | 15/179 [03:44<43:04, 15.76s/it]  9%|▉         | 16/179 [03:59<42:41, 15.71s/it]  9%|▉         | 17/179 [04:17<44:11, 16.37s/it] 10%|█         | 18/179 [04:33<43:44, 16.30s/it] 11%|█         | 19/179 [04:45<39:32, 14.83s/it] 11%|█         | 20/179 [04:59<38:57, 14.70s/it] 12%|█▏        | 21/179 [05:14<39:08, 14.86s/it] 12%|█▏        | 22/179 [05:41<48:13, 18.43s/it] 13%|█▎        | 23/179 [05:51<41:39, 16.02s/it] 13%|█▎        | 24/179 [06:12<44:53, 17.38s/it] 14%|█▍        | 25/179 [06:33<47:21, 18.45s/it] 15%|█▍        | 26/179 [06:56<50:14, 19.70s/it] 15%|█▌        | 27/179 [07:12<47:09, 18.62s/it] 16%|█▌        | 28/179 [07:30<46:20, 18.42s/it] 16%|█▌        | 29/179 [07:49<46:33, 18.62s/it] 17%|█▋        | 30/179 [08:04<43:24, 17.48s/it] 17%|█▋        | 31/179 [08:18<40:40, 16.49s/it] 18%|█▊        | 32/179 [08:34<40:31, 16.54s/it] 18%|█▊        | 33/179 [09:06<51:28, 21.15s/it] 19%|█▉        | 34/179 [09:26<50:14, 20.79s/it] 20%|█▉        | 35/179 [09:40<44:46, 18.66s/it] 20%|██        | 36/179 [09:51<38:45, 16.26s/it] 21%|██        | 37/179 [10:08<39:03, 16.51s/it] 21%|██        | 38/179 [10:29<42:33, 18.11s/it] 22%|██▏       | 39/179 [10:47<41:35, 17.83s/it] 22%|██▏       | 40/179 [11:08<43:27, 18.76s/it] 23%|██▎       | 41/179 [11:24<41:32, 18.06s/it] 23%|██▎       | 42/179 [11:35<36:39, 16.06s/it] 24%|██▍       | 43/179 [11:46<32:39, 14.41s/it] 25%|██▍       | 44/179 [11:59<31:34, 14.03s/it] 25%|██▌       | 45/179 [12:19<35:23, 15.84s/it] 26%|██▌       | 46/179 [12:30<32:01, 14.45s/it] 26%|██▋       | 47/179 [12:51<36:07, 16.42s/it] 27%|██▋       | 48/179 [13:11<37:46, 17.30s/it] 27%|██▋       | 49/179 [13:32<40:07, 18.52s/it] 28%|██▊       | 50/179 [13:55<42:35, 19.81s/it] 28%|██▊       | 51/179 [14:09<38:31, 18.06s/it] 29%|██▉       | 52/179 [14:25<36:49, 17.40s/it] 30%|██▉       | 53/179 [14:37<33:17, 15.86s/it] 30%|███       | 54/179 [14:56<34:57, 16.78s/it] 31%|███       | 55/179 [15:22<40:40, 19.68s/it] 31%|███▏      | 56/179 [15:43<40:45, 19.88s/it] 32%|███▏      | 57/179 [15:56<36:37, 18.02s/it] 32%|███▏      | 58/179 [16:09<33:07, 16.42s/it] 33%|███▎      | 59/179 [16:29<34:54, 17.45s/it] 34%|███▎      | 60/179 [16:50<36:46, 18.54s/it] 34%|███▍      | 61/179 [17:07<35:35, 18.10s/it] 35%|███▍      | 62/179 [17:18<31:03, 15.92s/it] 35%|███▌      | 63/179 [17:38<33:18, 17.23s/it] 36%|███▌      | 64/179 [17:55<32:37, 17.02s/it] 36%|███▋      | 65/179 [18:08<30:15, 15.92s/it] 37%|███▋      | 66/179 [18:26<31:12, 16.57s/it] 37%|███▋      | 67/179 [18:50<34:52, 18.68s/it] 38%|███▊      | 68/179 [19:00<29:47, 16.10s/it] 39%|███▊      | 69/179 [19:10<26:25, 14.42s/it] 39%|███▉      | 70/179 [19:22<24:41, 13.59s/it] 40%|███▉      | 71/179 [19:34<23:18, 12.95s/it] 40%|████      | 72/179 [19:44<21:41, 12.16s/it] 41%|████      | 73/179 [19:59<22:49, 12.92s/it] 41%|████▏     | 74/179 [20:14<24:08, 13.79s/it] 42%|████▏     | 75/179 [20:35<27:32, 15.89s/it] 42%|████▏     | 76/179 [20:51<27:20, 15.92s/it] 43%|████▎     | 77/179 [21:13<30:19, 17.83s/it] 44%|████▎     | 78/179 [21:32<30:14, 17.97s/it] 44%|████▍     | 79/179 [23:21<1:15:46, 45.47s/it] 45%|████▍     | 80/179 [23:45<1:04:04, 38.84s/it] 45%|████▌     | 81/179 [24:04<53:40, 32.87s/it]   46%|████▌     | 82/179 [24:26<47:49, 29.58s/it] 46%|████▋     | 83/179 [24:45<42:39, 26.66s/it] 47%|████▋     | 84/179 [25:09<40:32, 25.60s/it] 47%|████▋     | 85/179 [25:30<38:15, 24.42s/it] 48%|████▊     | 86/179 [25:51<35:56, 23.19s/it] 49%|████▊     | 87/179 [26:08<32:49, 21.40s/it] 49%|████▉     | 88/179 [26:30<32:43, 21.58s/it] 50%|████▉     | 89/179 [26:49<31:27, 20.97s/it] 50%|█████     | 90/179 [27:07<29:50, 20.12s/it] 51%|█████     | 91/179 [27:19<25:31, 17.41s/it] 51%|█████▏    | 92/179 [27:31<23:07, 15.94s/it] 52%|█████▏    | 93/179 [27:48<23:20, 16.28s/it] 53%|█████▎    | 94/179 [28:09<25:05, 17.72s/it] 53%|█████▎    | 95/179 [28:30<26:08, 18.67s/it] 54%|█████▎    | 96/179 [28:54<28:00, 20.25s/it] 54%|█████▍    | 97/179 [29:13<27:10, 19.88s/it] 55%|█████▍    | 98/179 [29:30<25:27, 18.85s/it] 55%|█████▌    | 99/179 [29:48<24:55, 18.70s/it] 56%|█████▌    | 100/179 [30:03<23:12, 17.63s/it] 56%|█████▋    | 101/179 [30:18<22:03, 16.97s/it] 57%|█████▋    | 102/179 [30:30<19:37, 15.30s/it] 58%|█████▊    | 103/179 [30:46<19:49, 15.65s/it] 58%|█████▊    | 104/179 [31:07<21:27, 17.16s/it] 59%|█████▊    | 105/179 [31:23<20:46, 16.84s/it] 59%|█████▉    | 106/179 [31:45<22:13, 18.26s/it] 60%|█████▉    | 107/179 [32:02<21:33, 17.97s/it] 60%|██████    | 108/179 [32:17<20:07, 17.01s/it] 61%|██████    | 109/179 [32:31<19:03, 16.34s/it] 61%|██████▏   | 110/179 [32:50<19:24, 16.88s/it] 62%|██████▏   | 111/179 [33:06<18:48, 16.60s/it] 63%|██████▎   | 112/179 [33:26<19:52, 17.79s/it] 63%|██████▎   | 113/179 [33:53<22:32, 20.50s/it] 64%|██████▎   | 114/179 [34:05<19:24, 17.92s/it] 64%|██████▍   | 115/179 [34:35<23:05, 21.65s/it] 65%|██████▍   | 116/179 [34:52<21:09, 20.15s/it] 65%|██████▌   | 117/179 [35:13<21:11, 20.51s/it] 66%|██████▌   | 118/179 [35:44<24:04, 23.67s/it] 66%|██████▋   | 119/179 [35:58<20:37, 20.63s/it] 67%|██████▋   | 120/179 [36:14<18:54, 19.23s/it] 68%|██████▊   | 121/179 [36:25<16:20, 16.91s/it] 68%|██████▊   | 122/179 [36:50<18:21, 19.33s/it] 69%|██████▊   | 123/179 [37:11<18:25, 19.75s/it] 69%|██████▉   | 124/179 [37:22<15:44, 17.17s/it] 70%|██████▉   | 125/179 [37:41<15:47, 17.55s/it] 70%|███████   | 126/179 [37:59<15:38, 17.71s/it] 71%|███████   | 127/179 [38:15<14:56, 17.24s/it] 72%|███████▏  | 128/179 [38:29<13:54, 16.37s/it] 72%|███████▏  | 129/179 [38:46<13:48, 16.58s/it] 73%|███████▎  | 130/179 [39:06<14:19, 17.54s/it] 73%|███████▎  | 131/179 [39:43<18:49, 23.52s/it] 74%|███████▎  | 132/179 [39:54<15:22, 19.62s/it] 74%|███████▍  | 133/179 [40:13<14:57, 19.52s/it] 75%|███████▍  | 134/179 [40:26<13:12, 17.61s/it] 75%|███████▌  | 135/179 [40:43<12:37, 17.22s/it] 76%|███████▌  | 136/179 [40:54<11:05, 15.48s/it] 77%|███████▋  | 137/179 [41:11<11:03, 15.80s/it] 77%|███████▋  | 138/179 [41:24<10:12, 14.94s/it] 78%|███████▊  | 139/179 [41:44<11:02, 16.57s/it] 78%|███████▊  | 140/179 [42:05<11:35, 17.84s/it] 79%|███████▉  | 141/179 [42:18<10:28, 16.55s/it] 79%|███████▉  | 142/179 [42:33<09:51, 16.00s/it] 80%|███████▉  | 143/179 [42:47<09:12, 15.35s/it] 80%|████████  | 144/179 [42:57<08:03, 13.82s/it] 81%|████████  | 145/179 [43:11<07:48, 13.78s/it] 82%|████████▏ | 146/179 [43:25<07:43, 14.04s/it] 82%|████████▏ | 147/179 [43:39<07:24, 13.90s/it] 83%|████████▎ | 148/179 [43:56<07:43, 14.95s/it] 83%|████████▎ | 149/179 [44:20<08:46, 17.55s/it] 84%|████████▍ | 150/179 [44:33<07:46, 16.07s/it] 84%|████████▍ | 151/179 [44:53<08:03, 17.28s/it] 85%|████████▍ | 152/179 [45:19<08:55, 19.83s/it] 85%|████████▌ | 153/179 [45:34<08:04, 18.62s/it] 86%|████████▌ | 154/179 [45:47<07:00, 16.82s/it] 87%|████████▋ | 155/179 [46:08<07:11, 17.98s/it] 87%|████████▋ | 156/179 [46:18<05:59, 15.62s/it] 88%|████████▊ | 157/179 [46:35<05:52, 16.04s/it] 88%|████████▊ | 158/179 [46:50<05:34, 15.95s/it] 89%|████████▉ | 159/179 [47:05<05:12, 15.61s/it] 89%|████████▉ | 160/179 [47:15<04:23, 13.84s/it] 90%|████████▉ | 161/179 [47:29<04:10, 13.90s/it] 91%|█████████ | 162/179 [49:14<11:41, 41.24s/it] 91%|█████████ | 163/179 [49:32<09:06, 34.17s/it] 92%|█████████▏| 164/179 [49:50<07:22, 29.53s/it] 92%|█████████▏| 165/179 [50:08<06:01, 25.84s/it] 93%|█████████▎| 166/179 [50:27<05:11, 23.92s/it] 93%|█████████▎| 167/179 [50:46<04:28, 22.37s/it] 94%|█████████▍| 168/179 [51:06<04:00, 21.84s/it] 94%|█████████▍| 169/179 [51:34<03:54, 23.43s/it] 95%|█████████▍| 170/179 [51:53<03:20, 22.28s/it] 96%|█████████▌| 171/179 [52:17<03:00, 22.60s/it] 96%|█████████▌| 172/179 [52:37<02:33, 21.95s/it] 97%|█████████▋| 173/179 [52:56<02:06, 21.16s/it] 97%|█████████▋| 174/179 [53:14<01:41, 20.25s/it] 98%|█████████▊| 175/179 [53:29<01:14, 18.58s/it] 98%|█████████▊| 176/179 [53:57<01:04, 21.40s/it] 99%|█████████▉| 177/179 [54:13<00:39, 19.79s/it] 99%|█████████▉| 178/179 [54:31<00:19, 19.12s/it]100%|██████████| 179/179 [54:40<00:00, 16.04s/it]Building prefix dict from the default dictionary ...
-Loading model from cache /tmp/jieba.cache
-Loading model cost 0.497 seconds.
-Prefix dict has been built successfully.
-100%|██████████| 179/179 [54:51<00:00, 18.39s/it]
-***** predict metrics *****
-  predict_bleu-4             =    39.5681
-  predict_rouge-1            =    40.8799
-  predict_rouge-2            =    23.1171
-  predict_rouge-l            =    40.5815
-  predict_runtime            = 0:55:06.54
-  predict_samples_per_second =      1.512
-  predict_steps_per_second   =      0.054
-05/27/2024 01:10:01 - INFO - llamafactory.train.sft.trainer - Saving prediction results to saves/mistral/qlora_sft_bitsandbytes_small/predict/generated_predictions.jsonl

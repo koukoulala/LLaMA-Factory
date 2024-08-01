@@ -7,7 +7,6 @@ from collections import Counter
 import pandas as pd
 import pyarrow.parquet as pq
 import pyarrow as pa
-import difflib
 
 def reshape_category(CategoryName):
     if CategoryName == "":
@@ -45,47 +44,32 @@ def get_insight_indices(string_list):
 
     return random_string, indices
 
-def get_asset_that_contain_keywords(Asset_list, NormKeywords_list):
-    lower_Assets = [Asset.lower() for Asset in Asset_list]
-
-    ContainKW_Asset_list = []
-    #Contained_KW_list = [kw for kw in NormKeywords_list if kw in assets]
-    for Asset in lower_Assets:
-        if any(keyword in Asset for keyword in NormKeywords_list):
-            ContainKW_Asset_list.append(Asset)
-            break
-    
-    return ContainKW_Asset_list
-
 
 def main(args):
     inputfile = args.input
 
     input_row = 0
     data_idx = 0
-    data_withDKI, data_withInsight, data_withTopKW = 0, 0, 0
+    data_withDKI = 0
+    data_withInsight = 0
     full_data_list = []
 
     user_prompt_template = "Please generate {} Ad {} in {} language, based on the following information:\n"
     with open(inputfile, 'r', encoding='utf-8') as fp:
         for line in fp.readlines():
-            if input_row > 50:
-                break
-            FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, JointNormKeywords, sd_doc = line.split('\t')
+            FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, sd_doc = line.split('\t')
             Asset_list = JointAsset.split('[SEP]')
             Asset_list = [asset.strip() for asset in Asset_list]
             IsDKI_list = JointIsDKI.split('[SEP]')
             IsDKI_list = [isDKI.strip() for isDKI in IsDKI_list]
             Insight_list = JointInsight.split('[SEP]')
             Insight_list = [insight.strip() for insight in Insight_list]
-            NormKeywords_list = JointNormKeywords.split('[SEP]')
-            NormKeywords_list = [normKeyword.strip().lower().strip(' +.,!=-#，。！&@￥$()') for normKeyword in NormKeywords_list]
 
             detail_info = "FinalUrl: " + FinalUrl + " \n"
-            if len(Domain) > 2 and random.random() <= 0.9:
+            if len(Domain) > 2:
                 detail_info += "Domain: " + Domain + " \n"
             reshaped_category_name = reshape_category(CategoryName)
-            if len(reshaped_category_name) > 2 and random.random() <= 0.9:
+            if len(reshaped_category_name) > 2:
                 detail_info += "Category: " + reshaped_category_name + " \n"
             if len(DescriptionOfAdvertiser) > 2:
                 detail_info += "DescriptionOfAdvertiser: " + DescriptionOfAdvertiser + " \n"
@@ -134,25 +118,6 @@ def main(args):
                     data_idx += 1
                     data_withInsight += 1
 
-            if any(NormKeywords_list):
-                # construct prompt that assets contain keywords
-                len_kw = len(NormKeywords_list)
-                if len_kw > 10:
-                    for _ in range(2):
-                        part_kws = random.sample(NormKeywords_list, int(len_kw/2))
-                        print("part_kws: ", part_kws)
-                        ContainKW_Asset_list = get_asset_that_contain_keywords(Asset_list, part_kws)
-                        if any(ContainKW_Asset_list):
-                            ContainKW_Asset_list = list(set(ContainKW_Asset_list))
-                            AssetCnt = len(ContainKW_Asset_list)
-                            detail_KW_info = detail_info + "Keywords: " + "#".join(part_kws) + " \n"
-                            detail_KW_info = detail_KW_info + "Insight: " + "Ensure relevance by including reasonable keywords in each " + AssetType.lower() + "." + " \n"
-                            message = construct_message(user_prompt_template, detail_KW_info, ContainKW_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
-                            print("ContainKW message: ", message)
-                            full_data_list.append(message)
-                            data_idx += 1
-                            data_withTopKW += 1
-
             if any(Asset_list):
                 # Doing generation without insight for the non-DKI assets
                 Asset_list = list(set(Asset_list))
@@ -198,7 +163,11 @@ def main(args):
     with open(args.test, 'w', encoding='utf-8') as fw_test:
         json.dump(test_data, fw_test, ensure_ascii=False, indent=4)
 
+    samll_train_data = train_data[:2000]
     samll_test_data = test_data[:200]
+    with open(args.small_train, 'w', encoding='utf-8') as fw_small_train:
+        json.dump(samll_train_data, fw_small_train, ensure_ascii=False, indent=4)
+    
     with open(args.small_test, 'w', encoding='utf-8') as fw_small_test:
         json.dump(samll_test_data, fw_small_test, ensure_ascii=False, indent=4)
 
@@ -226,15 +195,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
     parser.add_argument('-i', '--input', help='input file', default="./OriginalCombinedAssets.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_AddDiversity.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_AddDiversity.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_AddDiversity.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_AddDiversity.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_AddDiversity.json")
     args = parser.parse_args()
     main(args)
-    '''
+
     out_prompt_file = "./inference_prompt_AddDiversity.tsv"
     out_response_file = "./inference_groundtruth_AddDiversity.tsv"
     ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
-    '''
 
