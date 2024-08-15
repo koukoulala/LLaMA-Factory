@@ -1,9 +1,9 @@
 {
-  "AssetGeneration_small_train": {
-    "file_name": "AssetGeneration/small_train.json"
+  "DataFromAether_train": {
+    "file_name": "DataFromAether/train.json"
   },
-  "AssetGeneration_small_test": {
-    "file_name": "AssetGeneration/small_test.json"
+  "DataFromAether_test": {
+    "file_name": "DataFromAether/test.json"
   },
   "AssetGeneration_train": {
     "file_name": "AssetGeneration/train.json"
@@ -11,8 +11,11 @@
   "AssetGeneration_test": {
     "file_name": "AssetGeneration/test.json"
   },
-  "AssetGeneration_test_add_diversity": {
-    "file_name": "AssetGeneration/test_AddDiversity.json"
+  "AssetGeneration_train_add_copilot": {
+    "file_name": "AssetGeneration/train_add_copilot.json"
+  },
+  "AssetGeneration_train_add_copilot_sample": {
+    "file_name": "AssetGeneration/train_add_copilot_2.json"
   },
   "AssetGeneration_orpo_train": {
     "file_name": "AssetGeneration/train_orpo.json",

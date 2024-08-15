@@ -7,26 +7,26 @@ quantization_method: bitsandbytes
 stage: sft
 do_train: true
 finetuning_type: lora
-lora_target: all
+lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj
 flash_attn: fa2
 
 ### dataset
 dataset: AssetGeneration_train
 template: phi
 cutoff_len: 1024
-max_samples: 1000000
+max_samples: 2000000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/phi/fsdp_qlora_sft/
+output_dir: saves/phi/fsdp_qlora_sft_new/
 logging_steps: 10
 save_steps: 500
 plot_loss: true
 overwrite_output_dir: true
 
 ### train
-per_device_train_batch_size: 32
+per_device_train_batch_size: 45
 gradient_accumulation_steps: 2
 learning_rate: 0.0001
 num_train_epochs: 2.0
@@ -38,6 +38,6 @@ ddp_timeout: 180000000
 
 ### eval
 val_size: 0.002
-per_device_eval_batch_size: 64
+per_device_eval_batch_size: 80
 evaluation_strategy: steps
 eval_steps: 500

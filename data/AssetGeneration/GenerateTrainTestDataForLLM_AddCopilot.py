@@ -4,9 +4,6 @@ import argparse
 import re
 import random
 from collections import Counter
-import pandas as pd
-import pyarrow.parquet as pq
-import pyarrow as pa
 import difflib
 from sklearn.metrics import jaccard_score
 import numpy as np
@@ -93,32 +90,35 @@ def main(args):
 
     input_row = 0
     data_idx = 0
-    data_withDKI, data_withInsight, data_withTopKW = 0, 0, 0
+    data_withDKI, data_withInsight, data_withTopKW, data_copilot = 0, 0, 0, 0
     full_data_list = []
 
     user_prompt_template = "Please generate {} Ad {} in {} language, based on the following information:\n"
     with open(inputfile, 'r', encoding='utf-8') as fp:
         for line in fp.readlines():
-            FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, JointNormKeywords, sd_doc = line.split('\t')
+            Scenario, FinalUrl, Domain, CategoryName, DescriptionOfAdvertiser, FullLanguage, AssetType, JointAsset, JointIsDKI, JointInsight, JointNormKeywords, sd_doc = line.split('\t')
+            if Scenario != "RewriteAsset" and random.random() < 0.5:
+                continue
+            detail_info = "FinalUrl: " + FinalUrl + " \n"
             Asset_list = JointAsset.split('[SEP]')
             Asset_list = [asset.strip() for asset in Asset_list]
-            IsDKI_list = JointIsDKI.split('[SEP]')
-            IsDKI_list = [isDKI.strip() for isDKI in IsDKI_list]
-            Insight_list = JointInsight.split('[SEP]')
-            Insight_list = [insight.strip() for insight in Insight_list]
-            NormKeywords_list = JointNormKeywords.split('#')
-            NormKeywords_list = [normKeyword.lower().strip(' +.,!=-#，。！&@￥$()') for normKeyword in NormKeywords_list]
-            NormKeywords_list = [kw for kw in NormKeywords_list if len(kw) > 1]
+            if Scenario == "AssetGeneration":
+                IsDKI_list = JointIsDKI.split('[SEP]')
+                IsDKI_list = [isDKI.strip() for isDKI in IsDKI_list]
+                Insight_list = JointInsight.split('[SEP]')
+                Insight_list = [insight.strip() for insight in Insight_list]
+                NormKeywords_list = JointNormKeywords.split('#')
+                NormKeywords_list = [normKeyword.lower().strip(' +.,!=-#，。！&@￥$()') for normKeyword in NormKeywords_list]
+                NormKeywords_list = [kw for kw in NormKeywords_list if len(kw) > 1]
 
-            detail_info = "FinalUrl: " + FinalUrl + " \n"
-            if len(Domain) > 2 and random.random() <= 0.9:
-                detail_info += "Domain: " + Domain + " \n"
-            reshaped_category_name = reshape_category(CategoryName)
-            if len(reshaped_category_name) > 2 and random.random() <= 0.9:
-                detail_info += "Category: " + reshaped_category_name + " \n"
-            if len(DescriptionOfAdvertiser) > 2:
-                detail_info += "DescriptionOfAdvertiser: " + DescriptionOfAdvertiser + " \n"
-            if len(sd_doc) > 2:
+                if len(Domain) > 2 and random.random() <= 0.9:
+                    detail_info += "Domain: " + Domain + " \n"
+                reshaped_category_name = reshape_category(CategoryName)
+                if len(reshaped_category_name) > 2 and random.random() <= 0.9:
+                    detail_info += "Category: " + reshaped_category_name + " \n"
+                if len(DescriptionOfAdvertiser) > 2:
+                    detail_info += "DescriptionOfAdvertiser: " + DescriptionOfAdvertiser + " \n"
+            if len(sd_doc) > 2 and Scenario in ("AssetGeneration", "AssetGenerationBasedOnTheme", "ThemeGeneration"):
                 delimiters = ";\n"
                 regexPattern = '|'.join(map(re.escape, delimiters))
                 text_list = re.split(regexPattern, sd_doc)
@@ -132,70 +132,82 @@ def main(args):
                 min_length = min([len(asset) for asset in Asset_list])
                 detail_info += "CharacterLimit: between " + str(min_length) + " to 90 characters. \n"
 
-            if "1" in IsDKI_list:
-                DKI_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "1"]
-                DKI_Asset_list = list(set(DKI_Asset_list))
-                AssetCnt = len(DKI_Asset_list)
-                Insight = "Incorporate dynamic keyword insertion to make your ad more relevant to query."
-                detail_DKI_info = detail_info + "Insight: " + Insight + " \n"
-
-                message = construct_message(user_prompt_template, detail_DKI_info, DKI_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
-                #print("IsDKI message: ", message)
-                full_data_list.append(message)
-                data_idx += 1
-                data_withDKI += 1
-                # refine non-DKI assets and insights
-                Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
-                Insight_list = [insight for insight, isDKI in zip(Insight_list, IsDKI_list) if isDKI == "0"]
-
-            if any(Insight_list) and random.random() < 0.5:
-                Insight, indices = get_insight_indices(Insight_list)
-                if Insight:
-                    #print("Doing generation with insight for the non-DKI assets.")
-                    Insight_Asset_list = [Asset_list[i] for i in indices]
-                    Insight_Asset_list = list(set(Insight_Asset_list))
-                    AssetCnt = len(Insight_Asset_list)
-                    detail_insight_info = detail_info + "Insight: " + Insight + " \n"
-
-                    message = construct_message(user_prompt_template, detail_insight_info, Insight_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
-                    #print("Insight message: ", message)
-                    full_data_list.append(message)
-                    data_idx += 1
-                    data_withInsight += 1
-
-            if any(NormKeywords_list):
-                # construct prompt that assets contain keywords
-                len_kw = len(NormKeywords_list)
-                if len_kw > 10:
-                    part_kws = random.sample(NormKeywords_list, int(len_kw/2))
-                    ContainKW_Asset_list = get_asset_that_contain_keywords(Asset_list, part_kws)
-                    if len(ContainKW_Asset_list) > 1 or (len(ContainKW_Asset_list) == 1 and random.random() < 0.6):
-                        ContainKW_Asset_list = list(set(ContainKW_Asset_list))
-                        #print("\npart_kws: ", part_kws)
-                        #print("ContainKW_Asset_list: ", ContainKW_Asset_list)
-                        AssetCnt = len(ContainKW_Asset_list)
-                        detail_KW_info = detail_info + "Keywords: " + "#".join(part_kws) + " \n"
-                        detail_KW_info = detail_KW_info + "Insight: " + "Ensure relevance by including reasonable keywords in each " + AssetType.lower() + "." + " \n"
-                        message = construct_message(user_prompt_template, detail_KW_info, ContainKW_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
-                        #print("ContainKW message: ", message)
-                        full_data_list.append(message)
-                        data_idx += 1
-                        data_withTopKW += 1
-
-            if any(Asset_list):
-                # Doing generation without insight for the non-DKI assets
+            if Scenario in ("AssetGenerationBasedOnTheme", "ChangeTone", "FindSimilarAssets", "RewriteAsset", "ThemeGeneration"):
+                # Doing generation for copilot Scenario
                 Asset_list = list(set(Asset_list))
                 AssetCnt = random.randint(1, len(Asset_list))
-                #rand_Asset_list = random.sample(Asset_list, AssetCnt)
                 rand_Asset_list = select_most_dissimilar_assets(Asset_list, AssetCnt)
-                if AssetCnt > 1 and random.random() < 0.5:
-                    detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
-                else:
-                    detail_insight_info = detail_info
+                detail_insight_info = detail_info + "Insight: " + JointInsight.strip() + " \n"
                 message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
                 #print("No Insight message: ", message)
                 full_data_list.append(message)
                 data_idx += 1
+                data_copilot += 1
+            elif random.random() < 0.5:
+                if "1" in IsDKI_list:
+                    DKI_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "1"]
+                    DKI_Asset_list = list(set(DKI_Asset_list))
+                    AssetCnt = len(DKI_Asset_list)
+                    Insight = "Incorporate dynamic keyword insertion to make your ad more relevant to query."
+                    detail_DKI_info = detail_info + "Insight: " + Insight + " \n"
+
+                    message = construct_message(user_prompt_template, detail_DKI_info, DKI_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
+                    #print("IsDKI message: ", message)
+                    full_data_list.append(message)
+                    data_idx += 1
+                    data_withDKI += 1
+                    # refine non-DKI assets and insights
+                    Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
+                    Insight_list = [insight for insight, isDKI in zip(Insight_list, IsDKI_list) if isDKI == "0"]
+
+                if any(Insight_list) and random.random() < 0.5:
+                    Insight, indices = get_insight_indices(Insight_list)
+                    if Insight:
+                        #print("Doing generation with insight for the non-DKI assets.")
+                        Insight_Asset_list = [Asset_list[i] for i in indices]
+                        Insight_Asset_list = list(set(Insight_Asset_list))
+                        AssetCnt = len(Insight_Asset_list)
+                        detail_insight_info = detail_info + "Insight: " + Insight + " \n"
+
+                        message = construct_message(user_prompt_template, detail_insight_info, Insight_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
+                        #print("Insight message: ", message)
+                        full_data_list.append(message)
+                        data_idx += 1
+                        data_withInsight += 1
+
+                if any(NormKeywords_list):
+                    # construct prompt that assets contain keywords
+                    len_kw = len(NormKeywords_list)
+                    if len_kw > 10:
+                        part_kws = random.sample(NormKeywords_list, int(len_kw/2))
+                        ContainKW_Asset_list = get_asset_that_contain_keywords(Asset_list, part_kws)
+                        if len(ContainKW_Asset_list) > 1 or (len(ContainKW_Asset_list) == 1 and random.random() < 0.6):
+                            ContainKW_Asset_list = list(set(ContainKW_Asset_list))
+                            #print("\npart_kws: ", part_kws)
+                            #print("ContainKW_Asset_list: ", ContainKW_Asset_list)
+                            AssetCnt = len(ContainKW_Asset_list)
+                            detail_KW_info = detail_info + "Keywords: " + "#".join(part_kws) + " \n"
+                            detail_KW_info = detail_KW_info + "Insight: " + "Ensure relevance by including reasonable keywords in each " + AssetType.lower() + "." + " \n"
+                            message = construct_message(user_prompt_template, detail_KW_info, ContainKW_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
+                            #print("ContainKW message: ", message)
+                            full_data_list.append(message)
+                            data_idx += 1
+                            data_withTopKW += 1
+
+                if any(Asset_list):
+                    # Doing generation without insight for the non-DKI assets
+                    Asset_list = list(set(Asset_list))
+                    AssetCnt = random.randint(1, len(Asset_list))
+                    #rand_Asset_list = random.sample(Asset_list, AssetCnt)
+                    rand_Asset_list = select_most_dissimilar_assets(Asset_list, AssetCnt)
+                    if AssetCnt > 1 and random.random() < 0.5:
+                        detail_insight_info = detail_info + "Insight: " + "Ensure diversity by highlighting various selling pionts in each " + AssetType.lower() + "." + " \n"
+                    else:
+                        detail_insight_info = detail_info
+                    message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, data_idx, AssetCnt, AssetType, FullLanguage)
+                    #print("No Insight message: ", message)
+                    full_data_list.append(message)
+                    data_idx += 1
 
             if input_row % 10000 == 0:
                 print("Processing row: ", input_row)
@@ -203,6 +215,7 @@ def main(args):
                 print("Total data with DKI: ", data_withDKI)
                 print("Total data with Insight: ", data_withInsight)
                 print("Total data with TopKW: ", data_withTopKW)
+                print("Total data with Copilot: ", data_copilot)
 
             input_row += 1
 
@@ -212,6 +225,7 @@ def main(args):
     print("Total data with DKI: ", data_withDKI)
     print("Total data with Insight: ", data_withInsight)
     print("Total data with TopKW: ", data_withTopKW)
+    print("Total data with Copilot: ", data_copilot)
 
     random.shuffle(full_data_list)
     train_size = int(len(full_data_list) * 0.95)
@@ -256,12 +270,12 @@ def ConvertJsonToInferenceData(input_file, out_prompt_file, out_response_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
-    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_2024-07-28.tsv")
+    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_2024-08-10.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_add_copilot_2.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_add_copilot_2.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_add_copilot_2.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_add_copilot_2.json")
     args = parser.parse_args()
     main(args)
     '''
