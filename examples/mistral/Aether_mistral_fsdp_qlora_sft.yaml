@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: [Input2]
+model_name_or_path: "[Input2]"
 quantization_bit: 4
 
 ### method
@@ -18,7 +18,7 @@ preprocessing_num_workers: 16
 
 ### output
 #output_dir: ./output
-output_dir: [Output1]
+output_dir: "[Output1]"
 logging_steps: 10
 save_steps: 500
 plot_loss: true
