@@ -9,7 +9,7 @@ finetuning_type: lora
 lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj
 
 ### dataset
-dataset: DataFromAether_train
+dataset: AetherData_train
 template: mistral
 cutoff_len: 1024
 max_samples: 2000000
