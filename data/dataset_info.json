@@ -1,6 +1,6 @@
 {
   "DataFromAether_train": {
-    "file_name": "/tmp/llm_finetuning/DataFromAether_train.json"
+    "file_name": "[Input1]"
   },
   "DataFromAether_test": {
     "file_name": "/tmp/llm_finetuning/DataFromAether_test.json"
