@@ -2,7 +2,10 @@
   "DataFromAether_train": {
     "file_name": "[Input1]"
   },
-  "DataFromAether_test": {
+  "AetherData_train": {
+    "file_name": "/tmp/llm_finetuning/DataFromAether_train.json"
+  },
+  "AetherData_test": {
     "file_name": "/tmp/llm_finetuning/DataFromAether_test.json"
   },
   "AssetGeneration_train": {
