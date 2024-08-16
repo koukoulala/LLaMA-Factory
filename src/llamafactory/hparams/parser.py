@@ -71,7 +71,41 @@ def _parse_args(parser: "HfArgumentParser", args: Optional[Dict[str, Any]] = Non
         raise ValueError("Some specified arguments are not used by the HfArgumentParser: {}".format(unknown_args))
 
     return (*parsed_args,)
+'''
+def _parse_args(parser: "HfArgumentParser", args: Optional[Dict[str, Any]] = None) -> Tuple[Any]:
+    config_file_args = {}
+    print("sys.argv: ", sys.argv)
 
+    if args is not None:
+        return parser.parse_dict(args)
+
+    if len(sys.argv) > 1 and sys.argv[1].endswith((".yaml", ".json")):
+        config_file_path = os.path.abspath(sys.argv[1])
+        if sys.argv[1].endswith(".yaml"):
+            config_file_args = parser.parse_yaml_file(config_file_path)
+        elif sys.argv[1].endswith(".json"):
+            config_file_args = parser.parse_json_file(config_file_path)
+
+        print("config_file_args after yaml: ", config_file_args)
+
+        # remove the config file from the command line arguments
+        #sys.argv = sys.argv[:1] + sys.argv[2:]
+        #print("sys.argv after removing config file: ", sys.argv)
+
+    for i in range(2, len(sys.argv)):
+        if sys.argv[i].startswith("--"):
+            arg_name = sys.argv[i][2:]
+            if "=" in arg_name:
+                arg_name, value = arg_name.split("=", 1)
+            else:
+                value = sys.argv[i + 1]
+                i += 1
+            config_file_args[arg_name] = value
+
+    print("Final merged args: ", config_file_args)
+
+    return parser.parse_dict(config_file_args)
+'''
 
 def _set_transformers_logging(log_level: Optional[int] = logging.INFO) -> None:
     transformers.utils.logging.set_verbosity(log_level)
