@@ -1,0 +1,11 @@
+### model
+model_name_or_path: ./output/merge/
+template: mistral
+
+### export
+export_dir: ./output/gptq
+export_quantization_bit: 4
+export_quantization_dataset: data/c4_demo.json
+export_size: 2
+export_device: cpu
+export_legacy_format: false
