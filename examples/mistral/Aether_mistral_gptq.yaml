@@ -3,7 +3,7 @@ model_name_or_path: ./output/merge/
 template: mistral
 
 ### export
-export_dir: ./output/gptq
+export_dir: ./output/merge_gptq
 export_quantization_bit: 4
 export_quantization_dataset: data/c4_demo.json
 export_size: 2
