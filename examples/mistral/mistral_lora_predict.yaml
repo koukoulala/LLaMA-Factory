@@ -3,7 +3,7 @@ model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
 #model_name_or_path: /data/xiaoyukou/LLM_Inference/output/Mistral-7B-orpo
 #adapter_name_or_path: saves/mistral/orpo_qlora_continue_2/
 #adapter_name_or_path: saves/mistral/fsdp_qlora_sft_new/
-adapter_name_or_path: saves/mistral/qlora_sft_add_copilot_sample
+adapter_name_or_path: saves/mistral/qlora_sft_add_copilot
 quantization_bit: 4
 
 ### method
@@ -20,7 +20,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/qlora_sft_add_copilot_sample/predict_new/
+output_dir: saves/mistral/qlora_sft_add_copilot/predict_new/
 overwrite_output_dir: true
 
 ### eval
