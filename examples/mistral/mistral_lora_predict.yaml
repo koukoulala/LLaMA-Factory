@@ -12,7 +12,8 @@ do_predict: true
 finetuning_type: lora
 
 ### dataset
-eval_dataset: AssetGeneration_test
+#eval_dataset: AssetGeneration_test
+eval_dataset: AssetGeneration_test_add_copilot
 template: mistral
 cutoff_len: 1024
 max_samples: 5000
@@ -20,7 +21,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/qlora_sft_add_copilot/predict_new/
+output_dir: saves/mistral/qlora_sft_add_copilot/predict_add_copilot/
 overwrite_output_dir: true
 
 ### eval

@@ -131,6 +131,8 @@ def main(args):
             if AssetType == "Description":
                 min_length = min([len(asset) for asset in Asset_list])
                 detail_info += "CharacterLimit: between " + str(min_length) + " to 90 characters. \n"
+            if AssetType == "Theme":
+                detail_info += "CharacterLimit: between 30 to 50 characters. \n"
 
             if Scenario in ("AssetGenerationBasedOnTheme", "ChangeTone", "FindSimilarAssets", "RewriteAsset", "ThemeGeneration"):
                 # Doing generation for copilot Scenario

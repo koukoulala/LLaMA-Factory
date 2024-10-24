@@ -1,9 +1,9 @@
 ### model
-model_name_or_path: saves/mistral/fsdp_qlora_sft_new/merge/
+model_name_or_path: saves/mistral/qlora_sft_add_copilot_sample/merge/
 template: mistral
 
 ### export
-export_dir: saves/mistral/fsdp_qlora_sft_new/merge_gptq/
+export_dir: saves/mistral/qlora_sft_add_copilot_sample/merge_gptq/
 export_quantization_bit: 4
 export_quantization_dataset: data/c4_demo.json
 export_size: 2
