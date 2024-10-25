@@ -11,6 +11,12 @@
   "AssetGeneration_test": {
     "file_name": "AssetGeneration/test.json"
   },
+  "AssetGeneration_train_add_copilot_10-25": {
+    "file_name": "AssetGeneration/train_add_copilot_10-25.json"
+  },
+  "AssetGeneration_test_add_copilot_10-25": {
+    "file_name": "AssetGeneration/test_add_copilot_10-25.json"
+  },
   "AssetGeneration_train_add_copilot": {
     "file_name": "AssetGeneration/train_add_copilot.json"
   },
