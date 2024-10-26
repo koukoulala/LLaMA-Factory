@@ -1,6 +1,5 @@
 ### model
-#model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
-model_name_or_path: /data/xiaoyukou/ckpts/Ministral-8B-Instruct-2410
+model_name_or_path: /data/xiaoyukou/ckpts/Llama-3.2-3B
 quantization_bit: 4
 quantization_method: bitsandbytes  # choices: [bitsandbytes (4/8), hqq (2/3/4/5/6/8), eetq (8)]
 
@@ -11,16 +10,15 @@ finetuning_type: lora
 lora_target: all
 
 ### dataset
-#dataset: AssetGeneration_train
 dataset: AssetGeneration_train_add_copilot_10-25
-template: mistral
+template: llama3
 cutoff_len: 1024
 max_samples: 2000000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/Ministral/fsdp_qlora_sft_add_copilot_10-25/
+output_dir: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/
 logging_steps: 10
 save_steps: 500
 plot_loss: true
