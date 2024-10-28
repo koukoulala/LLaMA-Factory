@@ -1,6 +1,6 @@
 ### model
-model_name_or_path: /tmp/llm_finetuning/model_ckpt/
-adapter_name_or_path: ./output
+model_name_or_path: /data/xiaoyukou/ckpts/Llama-3.2-3B
+adapter_name_or_path: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/
 quantization_bit: 4
 
 ### method
@@ -9,15 +9,15 @@ do_predict: true
 finetuning_type: lora
 
 ### dataset
-eval_dataset: AetherData_test
+eval_dataset: AssetGeneration_test_add_copilot_10-25
 template: llama3
 cutoff_len: 1024
-max_samples: 5000
+max_samples: 2000000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: ./output/predict
+output_dir: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/predict_add_copilot_10-25/
 overwrite_output_dir: true
 
 ### eval
