@@ -1,4 +1,4 @@
-transformers==4.44.0
+transformers==4.45.2
 datasets>=2.16.0,<=2.21.0
 accelerate>=0.30.1,<=0.34.2
 peft>=0.11.1,<=0.12.0
@@ -20,3 +20,4 @@ packaging
 pyyaml
 numpy<2.0.0
 av
+mistral_common>=1.4.4

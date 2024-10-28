@@ -1,12 +1,12 @@
 ### model
-model_name_or_path: /data/xiaoyukou/alignment-handbook/ckpts/Mistral-7B-Instruct-v0.2
+model_name_or_path: /data/xiaoyukou/ckpts/Ministral-8B-Instruct-2410
 
 ### method
 stage: sft
 do_predict: true
 
 ### dataset
-dataset: AssetGeneration_test
+eval_dataset: AssetGeneration_test_add_copilot_10-25
 template: mistral
 cutoff_len: 1024
 max_samples: 5000
@@ -14,9 +14,9 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/Instruct-v0.2/predict
+output_dir: saves/Ministral/initial_model/predict
 overwrite_output_dir: true
 
 ### eval
-per_device_eval_batch_size: 28
+per_device_eval_batch_size: 20
 predict_with_generate: true

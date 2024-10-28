@@ -12,12 +12,12 @@ finetuning_type: lora
 eval_dataset: AssetGeneration_test_add_copilot_10-25
 template: llama3
 cutoff_len: 1024
-max_samples: 2000000
+max_samples: 5000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/predict_add_copilot_10-25/
+output_dir: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/predict_test/
 overwrite_output_dir: true
 
 ### eval
