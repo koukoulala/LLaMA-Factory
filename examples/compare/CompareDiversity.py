@@ -61,10 +61,10 @@ def main(file_path):
     avg_predict_mbleu_diversity = sum(predict_mbleu_diversities) / len(predict_mbleu_diversities) if predict_mbleu_diversities else 0
     
     return {
-        'avg_label_lexical_diversity': avg_label_lexical_diversity,
-        'avg_predict_lexical_diversity': avg_predict_lexical_diversity,
-        'avg_label_mbleu_diversity': avg_label_mbleu_diversity,
-        'avg_predict_mbleu_diversity': avg_predict_mbleu_diversity
+        'avg_label_lexical_diversity': round(avg_label_lexical_diversity, 4),
+        'avg_predict_lexical_diversity': round(avg_predict_lexical_diversity, 4),
+        'avg_label_mbleu_diversity': round(avg_label_mbleu_diversity, 4),
+        'avg_predict_mbleu_diversity': round(avg_predict_mbleu_diversity, 4)
     }
     
 
