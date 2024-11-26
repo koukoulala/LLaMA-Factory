@@ -6,6 +6,6 @@ template: mistral
 export_dir: saves/mistral/qlora_sft_add_copilot_sample/merge_gptq_2/
 export_quantization_bit: 4
 export_quantization_dataset: data/c4_demo.json
-export_size: 8
+export_size: 6
 export_device: cpu
 export_legacy_format: false

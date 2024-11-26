@@ -1,15 +1,17 @@
 ### Note: DO NOT use quantized model or quantization_bit when merging lora adapters
 
 ### model
-model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
+model_name_or_path: /data/xiaoyukou/ckpts/Ministral-8B-Instruct-2410
+#model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
 #adapter_name_or_path: saves/mistral/orpo_qlora_continue_2
 #adapter_name_or_path: saves/mistral/orpo_qlora
-adapter_name_or_path: saves/mistral/qlora_sft_add_copilot_sample
+#adapter_name_or_path: saves/mistral/qlora_sft_add_copilot_sample
+adapter_name_or_path: saves/Ministral/fsdp_qlora_sft_add_copilot_10-25/
 template: mistral
 finetuning_type: lora
 
 ### export
-export_dir: saves/mistral/qlora_sft_add_copilot_sample/merge/
+export_dir: saves/Ministral/fsdp_qlora_sft_add_copilot_10-25/merge/
 export_size: 2
 export_device: cpu
 export_legacy_format: false

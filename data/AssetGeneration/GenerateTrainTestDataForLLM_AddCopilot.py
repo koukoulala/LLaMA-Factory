@@ -143,7 +143,7 @@ def main(args):
                     max_length = min_length + 10
                 detail_info += "CharacterLimit: between " + str(min_length) + " to " + str(max_length) + " characters. \n"
             if AssetType == "Theme":
-                detail_info += "CharacterLimit: between 30 to 40 characters. \n"
+                detail_info += "CharacterLimit: between 10 to 40 characters. \n"
 
             if Scenario in ("AssetGenerationBasedOnTheme", "AssetGenerationBasedOnThemeAndUser", "ChangeTone", "FindSimilarAssets", "RewriteAsset", "ThemeGeneration", "ThemeGenerationBasedOnUser"):
                 # Doing generation for copilot Scenario
