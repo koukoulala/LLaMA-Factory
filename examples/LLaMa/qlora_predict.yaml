@@ -1,0 +1,26 @@
+### model
+model_name_or_path: /data/xiaoyukou/ckpts/Llama-3.2-3B
+adapter_name_or_path: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/
+quantization_bit: 4
+
+### method
+stage: sft
+do_predict: true
+finetuning_type: lora
+
+### dataset
+eval_dataset: AssetGeneration_test_add_copilot_10-25
+template: llama3
+cutoff_len: 1024
+max_samples: 5000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/llama3/fsdp_qlora_sft_add_copilot_10-25/predict_test/
+overwrite_output_dir: true
+
+### eval
+per_device_eval_batch_size: 20
+predict_with_generate: true
+ddp_timeout: 180000000

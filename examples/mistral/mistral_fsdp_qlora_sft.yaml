@@ -1,19 +1,18 @@
 ### model
-model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
+#model_name_or_path: /data/xiaoyukou/ckpts/Mistral-7B-Instruct-v0.2
+model_name_or_path: /data/xiaoyukou/ckpts/Ministral-8B-Instruct-2410
 quantization_bit: 4
+quantization_method: bitsandbytes  # choices: [bitsandbytes (4/8), hqq (2/3/4/5/6/8), eetq (8)]
 
 ### method
 stage: sft
 do_train: true
 finetuning_type: lora
-lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj
-
-### ddp
-ddp_timeout: 180000000
+lora_target: all
 
 ### dataset
 #dataset: AssetGeneration_train
-dataset: AssetGeneration_train_add_copilot
+dataset: AssetGeneration_train_add_copilot_10-25
 template: mistral
 cutoff_len: 1024
 max_samples: 2000000
@@ -21,7 +20,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: saves/mistral/fsdp_qlora_sft_add_copilot/
+output_dir: saves/Ministral/fsdp_qlora_sft_add_copilot_10-25/
 logging_steps: 10
 save_steps: 500
 plot_loss: true
@@ -33,8 +32,9 @@ gradient_accumulation_steps: 2
 learning_rate: 0.0001
 num_train_epochs: 1.0
 lr_scheduler_type: cosine
-warmup_steps: 0.1
+warmup_ratio: 0.1
 bf16: true    # must be true for fsdp_qlora_sft
+ddp_timeout: 180000000
 
 ### eval
 val_size: 0.005
