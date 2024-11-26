@@ -266,6 +266,17 @@ def ConvertJsonToInferenceData(input_file, out_prompt_file, out_response_file):
     fw_prompt.close()
     fw_response.close()
 
+def split_data(input_file, output_file, split_ratio=0.5):
+    with open(input_file, 'r', encoding='utf-8') as fr:
+        data_list = json.load(fr)
+
+    split_idx = int(len(data_list) * split_ratio)
+    splited_data = data_list[:split_idx]
+    print("Splited data size: ", len(splited_data))
+
+    with open(output_file, 'w', encoding='utf-8') as fw:
+        json.dump(splited_data, fw, ensure_ascii=False, indent=4)
+
 
 
 if __name__ == '__main__':
@@ -276,11 +287,14 @@ if __name__ == '__main__':
     parser.add_argument('-tr', '--train', help='json file', default="./train_add_copilot_2.json")
     parser.add_argument('-te', '--test', help='json file', default="./test_add_copilot_2.json")
     parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_add_copilot_2.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_add_copilot_2.json")
     args = parser.parse_args()
-    main(args)
     '''
+    main(args)
+    
     out_prompt_file = "./inference_prompt_AddDiversity.tsv"
     out_response_file = "./inference_groundtruth_AddDiversity.tsv"
     ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
     '''
+
 
