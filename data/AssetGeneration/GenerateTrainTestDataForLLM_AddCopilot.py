@@ -332,5 +332,6 @@ if __name__ == '__main__':
     out_response_file = "./inference_groundtruth_AddDiversity.tsv"
     ConvertJsonToInferenceData(args.small_test, out_prompt_file, out_response_file)
     '''
+    split_data(args.train, args.small_train, 0.5)
 
 
