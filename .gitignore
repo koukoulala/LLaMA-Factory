@@ -5,6 +5,7 @@ data/AssetGeneration/*/*.json
 ckpts/
 output/
 logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -166,11 +167,21 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+# vscode
+.vscode/
+
+# uv
+uv.lock
+
 # custom .gitignore
 ms_cache/
 hf_cache/
+om_cache/
 cache/
 config/
 saves/
 output/
 wandb/
+swanlog/
+generated_predictions.jsonl
+predictions_score.json
