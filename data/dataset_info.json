@@ -1,4 +1,32 @@
 {
+  "AetherData_train": {
+    "file_name": "/tmp/llm_finetuning/DataFromAether_train.json"
+  },
+  "AetherData_test": {
+    "file_name": "/tmp/llm_finetuning/DataFromAether_test.json"
+  },
+  "AssetGeneration_train": {
+    "file_name": "AssetGeneration/train.json"
+  },
+  "AssetGeneration_test": {
+    "file_name": "AssetGeneration/test.json"
+  },
+  "AssetGeneration_train_add_copilot": {
+    "file_name": "AssetGeneration/train_add_copilot.json"
+  },
+  "AssetGeneration_test_add_copilot": {
+    "file_name": "AssetGeneration/test_add_copilot.json"
+  },
+  "AssetGeneration_orpo_train": {
+    "file_name": "AssetGeneration/train_orpo.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "output",
+      "rejected": "rejected"
+    }
+  },
   "identity": {
     "file_name": "identity.json"
   },
