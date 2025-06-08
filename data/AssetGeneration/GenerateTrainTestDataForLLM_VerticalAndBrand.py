@@ -33,17 +33,31 @@ def construct_message(user_prompt_template, detail_info, Asset_list, AssetCnt, A
 
     return message
 
+def construct_message_with_length(user_prompt_template, detail_info, Asset_list, AssetCnt, AssetType):
+    min_length = max(0, min([len(asset) for asset in Asset_list]) - 5)
+    max_length = max([len(asset) for asset in Asset_list]) + 5
+    if max_length <= min_length:
+        max_length = min_length + 5
+    detail_info += "CharacterLimit: between " + str(min_length) + " to " + str(max_length) + " characters. \n"
+
+    instruction = user_prompt_template.format(AssetCnt, AssetType)
+    output = ""
+    for asset in Asset_list:
+        output += "<Ad>" + asset + "</Ad>\n"
+    message = {"instruction": instruction, "input": detail_info, "output": output}
+
+    return message
+
 def get_asset_that_contain_keywords(Asset_list, NormKeywords_list):
     lower_Assets = [Asset.lower().strip(' +.,!=-#，。！&@￥$()') for Asset in Asset_list]
 
     ContainKW_Asset_list = []
     #Contained_KW_list = [kw for kw in NormKeywords_list if kw in assets]
-    for idx in range(len(lower_Assets)):
-        lower_asset = lower_Assets[idx]
-        Asset = Asset_list[idx]
-        if any(keyword in lower_asset for keyword in NormKeywords_list):
-            ContainKW_Asset_list.append(Asset)
-            break
+    for idx, lower_asset in enumerate(lower_Assets):
+        if any(kw in lower_asset for kw in NormKeywords_list):
+            ContainKW_Asset_list.append(Asset_list[idx])
+
+    ContainKW_Asset_list = list(set(ContainKW_Asset_list))
     
     return ContainKW_Asset_list
 
@@ -78,17 +92,35 @@ def main(args):
 
     input_row = 0
     data_idx = 0
-    data_withDKI, data_withInsight, data_withTopKW, data_copilot, data_general = 0, 0, 0, 0, 0
+    data_withDKI, data_LowQuality, data_withTopKW, data_copilot, data_general = 0, 0, 0, 0, 0
+    scenario_cnt = {
+        "AssetGeneration": 0,
+        "AssetGenerationBasedOnQuery": 0,
+        "AssetGenerationBasedOnTheme": 0,
+        "AssetGenerationBasedOnThemeAndUser": 0,
+        "ThemeGeneration": 0,
+        "ThemeGenerationBasedOnUser": 0,
+        "ChangeTone": 0,
+        "FindSimilarAssets": 0,
+        "RewriteAsset": 0
+    }
+    scenario_probs = {
+        "AssetGeneration": 0.4,
+        "AssetGenerationBasedOnTheme": 0.65,
+        "AssetGenerationBasedOnThemeAndUser": 0.65,
+        "ThemeGeneration": 0.5,
+        "ThemeGenerationBasedOnUser": 0.6,
+        "ChangeTone": 0.15,
+        "FindSimilarAssets": 0.2,
+        "RewriteAsset": 0.2
+    }
     full_data_list = []
 
     user_prompt_template = "Please generate {} Ad {}, based on the following information:\n"
     with open(inputfile, 'r', encoding='utf-8') as fp:
         for line in fp.readlines():
-            Scenario, FinalUrl, Domain, CategoryName, FullLanguage, AssetType, VerticalBP, BrandVoice, Instruction, JointAsset, JointIsDKI, JointNormKeywords, sd_doc = line.split('\t')
-            '''
-            if Scenario != "RewriteAsset" and random.random() < 0.5:
-                continue
-            '''
+            Scenario, FinalUrl, Domain, CategoryName, FullLanguage, AssetType, VerticalBP, BrandVoice, Instruction, JointAsset, JointIsDKI, JointQualityLabel, JointNormKeywords, sd_doc = line.split('\t')
+            
             detail_info = "FinalUrl: " + FinalUrl + " \n"
             if random.random() <= 0.8:
                 detail_info += "TargetLanguage: " + FullLanguage + " \n"
@@ -101,20 +133,30 @@ def main(args):
                 detail_info += "VerticalBestPractice: " + VerticalBP + " \n"
             if Scenario in ("ThemeGeneration") and len(BrandVoice) > 2:
                 detail_info += "BrandVoice: " + BrandVoice + " \n"
-            
-            Asset_list = JointAsset.split('[SEP]')
-            Asset_list = [asset.strip() for asset in Asset_list]
-            if len(Asset_list) == 0:
+
+            raw_assets = JointAsset.split('[SEP]')
+            raw_quality = JointQualityLabel.split('[SEP]') 
+            raw_isDKI = JointIsDKI.split('[SEP]')
+            filtered = [
+                (asset.strip(), isDKI.strip())
+                for asset, quality, isDKI in zip(raw_assets, raw_quality, raw_isDKI)
+                if quality != "0"
+            ]
+
+            if not filtered:
+                data_LowQuality += 1
                 continue
+
+            Asset_list, IsDKI_list = zip(*filtered)
+            Asset_list = list(Asset_list)
+            IsDKI_list = list(IsDKI_list)
             
-            IsDKI_list = JointIsDKI.split('[SEP]')
-            IsDKI_list = [isDKI.strip() for isDKI in IsDKI_list]
             NormKeywords_list = JointNormKeywords.split('#')
             NormKeywords_list = [normKeyword.lower().strip(' +.,!=-#，。！&@￥$()') for normKeyword in NormKeywords_list]
             NormKeywords_list = [kw for kw in NormKeywords_list if len(kw) > 1]
 
 
-            if len(sd_doc) > 2 and Scenario in ("AssetGeneration", "AssetGenerationBasedOnUser", "AssetGenerationBasedOnTheme", "AssetGenerationBasedOnThemeAndUser", "ThemeGeneration", "ThemeGenerationBasedOnUser"):
+            if len(sd_doc) > 2 and Scenario in ("AssetGeneration", "AssetGenerationBasedOnQuery", "AssetGenerationBasedOnTheme", "AssetGenerationBasedOnThemeAndUser", "ThemeGeneration", "ThemeGenerationBasedOnUser"):
                 delimiters = ";\n"
                 regexPattern = '|'.join(map(re.escape, delimiters))
                 text_list = re.split(regexPattern, sd_doc)
@@ -122,13 +164,13 @@ def main(args):
                 SD_text = "; ".join(cleaned_text_list)
                 sd_doc = SD_text[:400]
                 detail_info += "LandingPage: " + sd_doc + " \n"
-            
+            '''
             min_length = max(0, min([len(asset) for asset in Asset_list]) - 5)
             max_length = max([len(asset) for asset in Asset_list]) + 5
             if max_length <= min_length:
                 max_length = min_length + 5
             detail_info += "CharacterLimit: between " + str(min_length) + " to " + str(max_length) + " characters. \n"
-
+            '''
             if Scenario in ["AssetGeneration"]:
                 if "1" in IsDKI_list:
                     DKI_Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "1"]
@@ -138,40 +180,42 @@ def main(args):
                         Instruction = "Incorporate dynamic keyword insertion to make your ad more relevant to query."
                         detail_DKI_info = detail_info + "Instruction: " + Instruction + " \n"
 
-                        message = construct_message(user_prompt_template, detail_DKI_info, DKI_Asset_list, AssetCnt, AssetType)
+                        message = construct_message_with_length(user_prompt_template, detail_DKI_info, DKI_Asset_list, AssetCnt, AssetType)
                         #print("IsDKI message: ", message)
                         full_data_list.append(message)
                         data_idx += 1
                         data_withDKI += 1
+                        scenario_cnt[Scenario] += 1
                         # refine non-DKI assets and insights
                         Asset_list = [asset for asset, isDKI in zip(Asset_list, IsDKI_list) if isDKI == "0"]
                 if any(NormKeywords_list):
                     # construct prompt that assets contain keywords
                     len_kw = len(NormKeywords_list)
-                    if len_kw >= 5:
+                    if len_kw >= 2:
                         part_kws = random.sample(NormKeywords_list, int(len_kw/2))
                         ContainKW_Asset_list = get_asset_that_contain_keywords(Asset_list, part_kws)
-                        if len(ContainKW_Asset_list) > 1 or (len(ContainKW_Asset_list) == 1 and random.random() <= 0.5):
+                        if len(ContainKW_Asset_list) > 2 or (len(ContainKW_Asset_list) >= 1 and random.random() <= 0.5):
                             ContainKW_Asset_list = list(set(ContainKW_Asset_list))
                             #print("\npart_kws: ", part_kws)
                             #print("ContainKW_Asset_list: ", ContainKW_Asset_list)
                             AssetCnt = len(ContainKW_Asset_list)
                             detail_KW_info = detail_info + "Keywords: " + "#".join(part_kws) + " \n"
                             detail_KW_info = detail_KW_info + "Instruction: " + "Ensure relevance by including reasonable keywords in each " + AssetType.lower() + "." + " \n"
-                            message = construct_message(user_prompt_template, detail_KW_info, ContainKW_Asset_list, AssetCnt, AssetType)
+                            message = construct_message_with_length(user_prompt_template, detail_KW_info, ContainKW_Asset_list, AssetCnt, AssetType)
                             #print("ContainKW message: ", message)
                             full_data_list.append(message)
                             data_idx += 1
                             data_withTopKW += 1
+                            scenario_cnt[Scenario] += 1
 
-                if any(Asset_list) and random.random() <= 0.5:
+                if any(Asset_list) and random.random() <= scenario_probs[Scenario]:
                     # Doing generation without insight for the non-DKI assets
                     Asset_list = list(set(Asset_list))
-                    if len(Asset_list) >= 3 or random.random() <= 0.5:
-                        if len(Asset_list) < 3:
+                    if len(Asset_list) > 3 or random.random() <= 0.2:
+                        if len(Asset_list) <= 3:
                             AssetCnt = len(Asset_list)
                         else:
-                            AssetCnt = random.randint(1, min(6, len(Asset_list)))
+                            AssetCnt = random.randint(1, min(8, len(Asset_list)))
                         #rand_Asset_list = random.sample(Asset_list, AssetCnt)
                         #print("\nAsset_list: ", Asset_list)
                         rand_Asset_list = select_most_dissimilar_assets(Asset_list, AssetCnt)
@@ -180,49 +224,57 @@ def main(args):
                             detail_insight_info = detail_info + "Instruction: " + "Ensure diversity by highlighting various selling pionts." + " \n"
                         else:
                             detail_insight_info = detail_info
-                        message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType)
+                        message = construct_message_with_length(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType)
                         full_data_list.append(message)
                         data_idx += 1
                         data_general += 1
+                        scenario_cnt[Scenario] += 1
 
             else:
+                prob = scenario_probs.get(Scenario, 1.0)
+                if "1" not in IsDKI_list and random.random() > prob:
+                    continue
                 # Doing generation for copilot Scenario
                 Asset_list = list(set(Asset_list))
-                if len(Asset_list) >= 3 or random.random() <= 0.5:
+                if len(Asset_list) > 3 or random.random() <= 0.2 or "1" in IsDKI_list or Scenario in ("AssetGenerationBasedOnQuery"):
                     if len(Asset_list) < 3:
                         AssetCnt = len(Asset_list)
                     else:
-                        AssetCnt = random.randint(3, min(6, len(Asset_list)))
+                        AssetCnt = random.randint(3, min(8, len(Asset_list)))
                     #print("\nAsset_list: ", Asset_list)
                     rand_Asset_list = select_most_dissimilar_assets(Asset_list, AssetCnt)
                     #print("rand_Asset_list: ", rand_Asset_list)
                     detail_insight_info = detail_info + "Instruction: " + Instruction.strip() + " \n"
-                    message = construct_message(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType)
+                    message = construct_message_with_length(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType)
                     #print("No Insight message: ", message)
                     full_data_list.append(message)
                     data_idx += 1
                     data_copilot += 1
+                    scenario_cnt[Scenario] += 1
             
 
-            if input_row % 10000 == 0:
-                print("Processing row: ", input_row)
+            if input_row % 50000 == 0:
+                print("\nProcessing row: ", input_row)
+                print("Total low quality data rows: ", data_LowQuality)
                 print("Total data rows: ", data_idx)
                 print("Total data with DKI: ", data_withDKI)
-                print("Total data with Insight: ", data_withInsight)
                 print("Total data with TopKW: ", data_withTopKW)
-                print("Total data with Copilot: ", data_copilot)
                 print("Total data with General: ", data_general)
+                print("Total data with Copilot: ", data_copilot)
+                for scenario, count in scenario_cnt.items():
+                    print(f"Scenario '{scenario}' count: {count}")
 
             input_row += 1
 
 
-    print("\nTotal input rows: ", input_row)
-    print("Total data rows for model: ", data_idx)
+    print("\nTotal data rows for model: ", data_idx)
+    print("Total low quality data rows: ", data_LowQuality)
     print("Total data with DKI: ", data_withDKI)
-    print("Total data with Insight: ", data_withInsight)
     print("Total data with TopKW: ", data_withTopKW)
-    print("Total data with Copilot: ", data_copilot)
     print("Total data with General: ", data_general)
+    print("Total data with Copilot: ", data_copilot)
+    for scenario, count in scenario_cnt.items():
+        print(f"Scenario '{scenario}' count: {count}")
 
     random.shuffle(full_data_list)
     train_size = int(len(full_data_list) * 0.95)
@@ -278,13 +330,13 @@ def split_data(input_file, output_file, split_ratio=0.5):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
-    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_20250527.tsv")
+    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_20250528.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_20250527.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train_20250527.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test_20250527.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_20250527.json")
-    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_20250527.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_20250528.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_20250528.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_20250528.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_20250528.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_20250528.json")
     args = parser.parse_args()
     
     main(args)
