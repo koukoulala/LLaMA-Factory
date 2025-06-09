@@ -105,9 +105,9 @@ def main(args):
         "RewriteAsset": 0
     }
     scenario_probs = {
-        "AssetGeneration": 0.4,
-        "AssetGenerationBasedOnTheme": 0.65,
-        "AssetGenerationBasedOnThemeAndUser": 0.65,
+        "AssetGeneration": 0.3,
+        "AssetGenerationBasedOnTheme": 0.5,
+        "AssetGenerationBasedOnThemeAndUser": 0.5,
         "ThemeGeneration": 0.5,
         "ThemeGenerationBasedOnUser": 0.6,
         "ChangeTone": 0.15,
@@ -134,29 +134,38 @@ def main(args):
             if Scenario in ("ThemeGeneration") and len(BrandVoice) > 2:
                 detail_info += "BrandVoice: " + BrandVoice + " \n"
 
-            raw_assets = JointAsset.split('[SEP]')
-            raw_quality = JointQualityLabel.split('[SEP]') 
-            raw_isDKI = JointIsDKI.split('[SEP]')
-            filtered = [
-                (asset.strip(), isDKI.strip())
-                for asset, quality, isDKI in zip(raw_assets, raw_quality, raw_isDKI)
-                if quality != "0"
-            ]
+            if Scenario not in ("ThemeGeneration", "ThemeGenerationBasedOnUser", "AssetGenerationBasedOnQuery"):
+                raw_assets = JointAsset.split('[SEP]')
+                raw_quality = JointQualityLabel.split('[SEP]') 
+                raw_isDKI = JointIsDKI.split('[SEP]')
+                filtered = [
+                    (asset.strip(), isDKI.strip())
+                    for asset, quality, isDKI in zip(raw_assets, raw_quality, raw_isDKI)
+                    if quality == "1"
+                ]
 
-            if not filtered:
-                data_LowQuality += 1
-                continue
+                if not filtered:
+                    data_LowQuality += 1
+                    continue
 
-            Asset_list, IsDKI_list = zip(*filtered)
-            Asset_list = list(Asset_list)
-            IsDKI_list = list(IsDKI_list)
+                Asset_list, IsDKI_list = zip(*filtered)
+                Asset_list = list(Asset_list)
+                IsDKI_list = list(IsDKI_list)
+            else:
+                Asset_list = JointAsset.split('[SEP]')
+                Asset_list = [asset.strip() for asset in Asset_list]
+                if len(Asset_list) == 0:
+                    data_LowQuality += 1
+                    continue
+                IsDKI_list = JointIsDKI.split('[SEP]')
+                IsDKI_list = [isDKI.strip() for isDKI in IsDKI_list]
             
             NormKeywords_list = JointNormKeywords.split('#')
             NormKeywords_list = [normKeyword.lower().strip(' +.,!=-#，。！&@￥$()') for normKeyword in NormKeywords_list]
             NormKeywords_list = [kw for kw in NormKeywords_list if len(kw) > 1]
 
 
-            if len(sd_doc) > 2 and Scenario in ("AssetGeneration", "AssetGenerationBasedOnQuery", "AssetGenerationBasedOnTheme", "AssetGenerationBasedOnThemeAndUser", "ThemeGeneration", "ThemeGenerationBasedOnUser"):
+            if len(sd_doc) > 2 and random.random() <= 0.8 and Scenario in ("AssetGeneration", "AssetGenerationBasedOnQuery", "AssetGenerationBasedOnTheme", "AssetGenerationBasedOnThemeAndUser", "ThemeGeneration", "ThemeGenerationBasedOnUser"):
                 delimiters = ";\n"
                 regexPattern = '|'.join(map(re.escape, delimiters))
                 text_list = re.split(regexPattern, sd_doc)
