@@ -11,7 +11,7 @@ from itertools import combinations
 from googletrans import Translator
 from nltk.corpus import wordnet
 import nltk
-
+nltk.download('punkt_tab')
 
 def reshape_category(CategoryName):
     if CategoryName == "":
@@ -150,24 +150,6 @@ def get_rejected_assets(Chosen_Asset_list, AssetCnt, FullLanguage, Asset_list, r
         # low quality assets
         rejected_Asset_list = random.sample(low_quality_asset_list, AssetCnt)
         rejected_reasons["Low Quality"] += 1
-
-    elif AssetCnt > 1 and p <= 0.6:
-        # diversity
-        sample_cnt = random.randint(1, AssetCnt - 1)
-        rejected_Asset_list = random.sample(Chosen_Asset_list, sample_cnt)
-        rejected_Asset_list = (rejected_Asset_list * (AssetCnt // sample_cnt + 1))[:AssetCnt]
-        if random.random() < 0.2:
-            updated_rejected_Asset_list = []
-            for asset in rejected_Asset_list:
-                asset = replace_with_synonyms(asset)
-                asset = delete_random_words(asset)
-                asset = add_random_words(asset)
-                updated_rejected_Asset_list.append(asset)
-            rejected_Asset_list = updated_rejected_Asset_list
-        random.shuffle(rejected_Asset_list)
-        rejected_reasons["Diversity"] += 1
-        #print("Chosen_Asset_list: ", Chosen_Asset_list)
-        #print("Diversity: ", rejected_Asset_list)
     else:
         # wrong asset length
         min_chosen_len, max_chosen_len = get_length_limit(Chosen_Asset_list)
@@ -175,6 +157,23 @@ def get_rejected_assets(Chosen_Asset_list, AssetCnt, FullLanguage, Asset_list, r
         if len(rejected_Asset_list) >= AssetCnt:
             rejected_Asset_list = random.sample(rejected_Asset_list, AssetCnt)
             rejected_reasons["Wrong Length"] += 1
+        elif AssetCnt > 1 and p <= 0.8:
+            # diversity
+            sample_cnt = random.randint(1, AssetCnt - 1)
+            rejected_Asset_list = random.sample(Chosen_Asset_list, sample_cnt)
+            rejected_Asset_list = (rejected_Asset_list * (AssetCnt // sample_cnt + 1))[:AssetCnt]
+            if random.random() <= 0.2:
+                updated_rejected_Asset_list = []
+                for asset in rejected_Asset_list:
+                    asset = replace_with_synonyms(asset)
+                    asset = delete_random_words(asset)
+                    asset = add_random_words(asset)
+                    updated_rejected_Asset_list.append(asset)
+                rejected_Asset_list = updated_rejected_Asset_list
+            random.shuffle(rejected_Asset_list)
+            rejected_reasons["Diversity"] += 1
+        #print("Chosen_Asset_list: ", Chosen_Asset_list)
+        #print("Diversity: ", rejected_Asset_list)
         else:
             if p <= 0.8:
                 # asset count
@@ -201,7 +200,6 @@ def get_rejected_assets(Chosen_Asset_list, AssetCnt, FullLanguage, Asset_list, r
                 #print("Different Language: ", rejected_Asset_list)
 
     return rejected_Asset_list, rejected_reasons
-
 
 
 def main(args):
@@ -385,7 +383,7 @@ def main(args):
                         if args.do_orpo:
                             # Get rejected assets
                             rejected_Asset_list, rejected_reasons = get_rejected_assets(rand_Asset_list, AssetCnt, FullLanguage, Asset_list, rejected_reasons, low_quality_asset_list)
-                            message = construct_message_orpo(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType, FullLanguage, rejected_Asset_list)
+                            message = construct_message_orpo(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType, rejected_Asset_list)
                         else:
                             message = construct_message_with_length(user_prompt_template, detail_insight_info, rand_Asset_list, AssetCnt, AssetType)
                         full_data_list.append(message)
@@ -475,13 +473,13 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='GenerateTrainTestDataForLLM')
-    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_20250528.tsv")
+    parser.add_argument('-i', '--input', help='input file', default="./CombinedAssets_20250620.tsv")
     #parser.add_argument('-i', '--input', help='input file', default="../data/AssetGeneration/test.tsv")
-    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo_20250528.json")
-    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo_20250528.json")
-    parser.add_argument('-te', '--test', help='json file', default="./test_orpo_20250528.json")
-    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo_20250528.json")
-    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo_20250528.json")
+    parser.add_argument('-fu', '--FullData', help='json file', default="./FullData_orpo_20250620.json")
+    parser.add_argument('-tr', '--train', help='json file', default="./train_orpo_20250620.json")
+    parser.add_argument('-te', '--test', help='json file', default="./test_orpo_20250620.json")
+    parser.add_argument('-small_te', '--small_test', help='json file', default="./small_test_orpo_20250620.json")
+    parser.add_argument('-small_tr', '--small_train', help='json file', default="./small_train_orpo_20250620.json")
     parser.add_argument('--do_orpo', action='store_true', default=False, help='whether to do orpo')
     args = parser.parse_args()
     main(args)
