@@ -5,6 +5,16 @@
   "AetherData_test": {
     "file_name": "/tmp/llm_finetuning/DataFromAether_test.json"
   },
+  "AetherData_orpo_train": {
+    "file_name": "/tmp/llm_finetuning/DataFromAether_train.json",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "output",
+      "rejected": "rejected"
+    }
+  },
   "AssetGeneration_train": {
     "file_name": "AssetGeneration/train.json"
   },
