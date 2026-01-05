@@ -169,6 +169,14 @@ uv.lock
 .DS_Store
 
 # custom .gitignore
+data/AssetGeneration/*.tsv
+data/AssetGeneration/*.json
+data/AssetGeneration/*/*.tsv
+data/AssetGeneration/*/*.json
+ckpts/
+logs/
+cache/
+config/
 hf_cache/
 ms_cache/
 om_cache/
