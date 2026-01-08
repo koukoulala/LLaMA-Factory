@@ -173,6 +173,10 @@ data/AssetGeneration/*.tsv
 data/AssetGeneration/*.json
 data/AssetGeneration/*/*.tsv
 data/AssetGeneration/*/*.json
+data/ImageLPRelevance/*.tsv
+data/ImageLPRelevance/*.json
+data/ImageLPRelevance/*/*.tsv
+data/ImageLPRelevance/*/*.json
 ckpts/
 logs/
 cache/
