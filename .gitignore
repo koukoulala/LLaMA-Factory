@@ -177,6 +177,7 @@ data/ImageLPRelevance/*.tsv
 data/ImageLPRelevance/*.json
 data/ImageLPRelevance/*/*.tsv
 data/ImageLPRelevance/*/*.json
+data/ImageLPRelevance/image_data/
 ckpts/
 logs/
 cache/
