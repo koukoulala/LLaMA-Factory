@@ -161,7 +161,9 @@ class MMPluginMixin:
         video_processor: BaseImageProcessor = getattr(
             processor, "video_processor", getattr(processor, "image_processor", None)
         )
-        feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None)
+        feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None) or getattr(
+            processor, "audio_processor", None
+        )
         if len(images) != 0 and self.image_token is None:
             raise ValueError(
                 "This model does not support image input. Please check whether the correct `template` is used."
@@ -390,7 +392,9 @@ class MMPluginMixin:
                 mm_inputs.update(video_processor(videos, return_tensors="pt"))
 
         if len(audios) != 0:
-            feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None)
+            feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None) or getattr(
+                processor, "audio_processor", None
+            )
             audios = self._regularize_audios(
                 audios,
                 sampling_rate=getattr(processor, "audio_sampling_rate", 16000),
@@ -1054,7 +1058,9 @@ class MiniCPMVPlugin(BasePlugin):
                 chunk_input=True,
                 sampling_rate=getattr(processor, "audio_sampling_rate", 16000),
             )
-            audio_feature_lens = [torch.tensor(audio_feature_len) for audio_feature_len in audio_feature_lens]
+            audio_feature_lens = [
+                x.clone().detach() if isinstance(x, torch.Tensor) else torch.tensor(x) for x in audio_feature_lens
+            ]
             mm_inputs.update({"audio_features": audio_features, "audio_feature_lens": audio_feature_lens})
             if kwargs.get("ret_phs", False):
                 mm_inputs.update({"audio_phs": audio_phs})
@@ -1094,7 +1100,7 @@ class MiniCPMVPlugin(BasePlugin):
                 num_image_tokens += 1
 
             while VIDEO_PLACEHOLDER in content:
-                video_seqlen = len(mm_inputs["pixel_values"][num_video_tokens]) if self.expand_mm_tokens else 1
+                video_seqlen = len(mm_inputs["image_sizes"][num_video_tokens]) if self.expand_mm_tokens else 1
                 content = content.replace(VIDEO_PLACEHOLDER, "{{image}}" * video_seqlen, 1)
                 num_video_tokens += 1
 
@@ -1876,7 +1882,9 @@ class Qwen2OmniPlugin(Qwen2VLPlugin):
     ) -> dict[str, "torch.Tensor"]:
         image_processor: BaseImageProcessor = getattr(processor, "image_processor", None)
         video_processor: BaseVideoProcessor = getattr(processor, "video_processor", None)
-        feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None)
+        feature_extractor: SequenceFeatureExtractor = getattr(processor, "feature_extractor", None) or getattr(
+            processor, "audio_processor", None
+        )
         mm_inputs = {}
         if len(images) != 0:
             images = self._regularize_images(
@@ -1981,6 +1989,7 @@ class Qwen2OmniPlugin(Qwen2VLPlugin):
                             f"Each {VIDEO_PLACEHOLDER} must be followed by an {AUDIO_PLACEHOLDER} when using audio in video."
                         )
 
+                    position_id_per_seconds: int = getattr(processor, "position_id_per_seconds", 25)
                     audio_t_index = torch.arange(audio_lengths[num_audio_tokens])
                     video_t_index = (
                         torch.arange(video_grid_thw[num_video_tokens][0])
@@ -1992,9 +2001,9 @@ class Qwen2OmniPlugin(Qwen2VLPlugin):
                         )
                         .flatten()
                         * mm_inputs["video_second_per_grid"][num_video_tokens]
-                        * 25  # FIXME hardcode of position_id_per_seconds=25
+                        * position_id_per_seconds
                     ).long()
-                    t_ntoken_per_chunk = 50  # FIXME hardcode: [25 * 2]
+                    t_ntoken_per_chunk = position_id_per_seconds * 2
                     video_chunk_indices = processor.get_chunked_index(video_t_index, t_ntoken_per_chunk)
                     audio_chunk_indices = processor.get_chunked_index(audio_t_index, t_ntoken_per_chunk)
                     placeholder_string = ""
