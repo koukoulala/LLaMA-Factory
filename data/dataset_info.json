@@ -1,4 +1,10 @@
 {
+  "shopping_gen_rec": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/sft_data/combined_sft.jsonl"
+  },
+  "shopping_profile": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/LLMTrainingData/SftData/profile_sft.json"
+  },
   "image_lp_relevance": {
     "file_name": "ImageLPRelevance/training_data.json",
     "formatting": "sharegpt",

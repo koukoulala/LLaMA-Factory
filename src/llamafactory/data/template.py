@@ -2058,7 +2058,7 @@ register_template(
     format_tools=ToolFormatter(tool_format="qwen3_5"),
     stop_words=["<|im_end|>"],
     replace_eos=True,
-    mm_plugin=get_mm_plugin(name="qwen3_vl", image_token="<|image_pad|>", video_token="<|video_pad|>"),
+    #mm_plugin=get_mm_plugin(name="qwen3_vl", image_token="<|image_pad|>", video_token="<|video_pad|>"),
 )
 
 

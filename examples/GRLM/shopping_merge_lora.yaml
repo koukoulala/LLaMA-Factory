@@ -1,0 +1,13 @@
+### Note: DO NOT use quantized model or quantization_bit when merging lora adapters
+
+### model
+model_name_or_path: /scratch/workspaceblobstore/users/xiaoyukou/ckpts/Qwen3.5-9B
+adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/checkpoint-28000
+template: qwen3_5_nothink
+trust_remote_code: true
+
+### export
+export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/merged_checkpoint-28000
+export_size: 5
+export_device: cpu  # choices: [cpu, auto]
+export_legacy_format: false
