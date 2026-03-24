@@ -2,12 +2,13 @@
 
 ### model
 model_name_or_path: /scratch/workspaceblobstore/users/xiaoyukou/ckpts/Qwen3.5-9B
-adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/checkpoint-28000
+#adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/
+adapter_name_or_path: /scratch/workspaceblobstore/users/wangying/LlamaFactory/saves/qwen3-5-9b_journey/lora_journey/sft_2gpus_lr5e-5_batch4_gradacc4_lorarank16_cut4096_packing/checkpoint-14932
 template: qwen3_5_nothink
 trust_remote_code: true
 
 ### export
-export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/merged_checkpoint-28000
+export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/merged_ying_checkpoint_14932
 export_size: 5
 export_device: cpu  # choices: [cpu, auto]
 export_legacy_format: false
