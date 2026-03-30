@@ -25,10 +25,10 @@ FORCE_TORCHRUN=1 DISABLE_VERSION_CHECK=1 CUDA_VISIBLE_DEVICES=0,1,2,3 python3 -u
     --dataloader_num_workers 8 \
     --tokenized_path /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v2/full_tokenized_dataset \
     --output_dir /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v2/ \
+    --resume_from_checkpoint /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v2/checkpoint-7000 \
     --logging_steps 20 \
     --save_steps ${SAVE_STEPS} \
     --plot_loss \
-    --overwrite_output_dir \
     --save_only_model false \
     --per_device_train_batch_size ${BATCH_SIZE} \
     --gradient_accumulation_steps ${GRADIENT_ACCUMULATION_STEPS} \

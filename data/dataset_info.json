@@ -1,4 +1,7 @@
 {
+  "shopping_gen_rec_v2": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/20260324/sft_data/combined_sft_v2.jsonl"
+  },
   "shopping_gen_rec": {
     "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/sft_data/combined_sft.jsonl"
   },
