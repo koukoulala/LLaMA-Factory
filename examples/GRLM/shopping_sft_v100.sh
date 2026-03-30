@@ -40,4 +40,16 @@ FORCE_TORCHRUN=1 DISABLE_VERSION_CHECK=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 py
     --save_only_model false \
     --per_device_train_batch_size ${BATCH_SIZE} \
     --gradient_accumulation_steps ${GRADIENT_ACCUMULATION_STEPS} \
-    --learning_rate ${LEARNING_RA
+    --learning_rate ${LEARNING_RATE} \
+    --num_train_epochs 2.0 \
+    --lr_scheduler_type cosine \
+    --warmup_ratio 0.03 \
+    --fp16 \
+    --ddp_timeout 180000000 \
+    --val_size 0.001 \
+    --per_device_eval_batch_size 2 \
+    --eval_strategy steps \
+    --eval_steps ${EVAL_STEPS} \
+    --flash_attn sdpa \
+    --packing true \
+    --enable_liger_kernel true

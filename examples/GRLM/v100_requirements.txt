@@ -1,0 +1,49 @@
+# Key packages for LLaMA-Factory SFT on V100 (CUDA, 8x V100-SXM2-32GB)
+# Generated from actual working environment on 2026-03-30
+# V100 = compute capability 7.0, NO bf16, NO FlashAttention-2, NO FP8
+# Note: torch installed from pytorch cu128 index (cu124 does NOT have 2.10.0)
+#       liger-kernel installed from GitHub main (PyPI 0.7.0 lacks Qwen3.5 support)
+#       LD_LIBRARY_PATH must include $HOME/anaconda3/lib for GLIBCXX_3.4.29+ (scipy needs it)
+
+# === Core Training Framework ===
+llamafactory==0.9.5.dev0      # installed via: pip install -e ".[torch,metrics]"
+deepspeed==0.18.8
+accelerate==1.13.0
+peft==0.18.1
+trl==0.24.0
+
+# === Model & Tokenizer ===
+transformers==5.4.0           # must be >=4.55.0 for Qwen3.5 support
+huggingface_hub==1.8.0
+tokenizers==0.22.2
+safetensors==0.7.0
+sentencepiece==0.2.1
+
+# === Kernel Acceleration (V100-compatible) ===
+liger-kernel==0.7.0+dev        # installed from GitHub main: pip install --no-deps git+https://github.com/linkedin/Liger-Kernel.git
+                               # PyPI 0.7.0 lacks Qwen3.5 support; GitHub main has apply_liger_kernel_to_qwen3_5
+# NOTE: flash-attn (FA2) does NOT work on V100 (requires Ampere+ SM 80+). Use --flash_attn sdpa instead.
+
+# === Quantization (for QLoRA) ===
+bitsandbytes==0.49.2           # 4-bit QLoRA; works with DeepSpeed ZeRO-2
+
+# === Data Processing ===
+datasets==4.8.4
+numpy==2.4.3
+pandas==2.3.3
+scipy==1.16.3
+
+# === Torch stack (installed from https://download.pytorch.org/whl/cu128) ===
+torch==2.10.0+cu128            # cu128 index required; cu124 only has up to 2.4.1
+torchvision==0.25.0+cu128
+torchaudio==2.10.0+cu128
+triton==3.6.0
+
+# === NOT compatible with V100 (do NOT install/enable) ===
+# flash-attn          → requires Ampere+ (SM 80+)
+# fp8 / transformer_engine → requires Hopper+ (SM 89+)
+# unsloth             → incompatible with DeepSpeed (which we need for multi-GPU)
+
+# === UI (optional) ===
+gradio==6.10.0
+matplotlib==3.10.6
