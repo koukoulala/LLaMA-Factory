@@ -1,4 +1,13 @@
 {
+  "shopping_gen_rec_v4_20260407": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/20260407/sft_data/combined_sft.jsonl"
+  },
+  "shopping_gen_rec_v4": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/20260406/sft_data/combined_sft.jsonl"
+  },
+  "shopping_gen_rec_v3_new": {
+    "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/20260324/sft_data_v3_new_2/combined_sft.jsonl"
+  },
   "shopping_gen_rec_v2": {
     "file_name": "/cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Data/LLMTrainingData/20260324/sft_data/combined_sft_v2.jsonl"
   },

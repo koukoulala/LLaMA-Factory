@@ -123,10 +123,10 @@ class CustomDPOTrainer(DPOTrainer):
             self.running = RunningMoments(self.accelerator)
 
     @override
-    def create_optimizer(self, model=None) -> "torch.optim.Optimizer":
+    def create_optimizer(self) -> "torch.optim.Optimizer":
         if self.optimizer is None:
             self.optimizer = create_custom_optimizer(self.model, self.args, self.finetuning_args)
-        return super().create_optimizer(model)
+        return super().create_optimizer()
 
     @override
     def create_scheduler(

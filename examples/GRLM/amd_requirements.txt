@@ -12,15 +12,14 @@ peft==0.18.1
 trl==0.28.0                   # must be <0.29 for LLaMA-Factory compat
 
 # === Model & Tokenizer ===
-transformers==5.4.0           # must be >=5.4 for Qwen3.5 support
+transformers==5.2.0           # downgraded from 5.4.0; LLaMA-Factory create_optimizer compat fixed
 huggingface_hub==1.8.0
 tokenizers==0.22.2
 safetensors==0.7.0
 sentencepiece==0.2.1
 
 # === Kernel Acceleration ===
-liger-kernel==0.7.0+dev        # installed from GitHub main: pip install git+https://github.com/linkedin/Liger-Kernel.git
-                               # PyPI 0.7.0 lacks Qwen3.5 support; GitHub main has apply_liger_kernel_to_qwen3_5
+liger-kernel==0.7.0            # python3 -m pip install --no-cache-dir "git+https://github.com/linkedin/Liger-Kernel.git"
 fla-core==0.4.2
 flash-linear-attention==0.4.2
 causal_conv1d==1.6.1           # built from source: cd /tmp/causal-conv1d && pip install --no-build-isolation .
@@ -36,6 +35,7 @@ torch==2.10.0+rocm7.0          # upgraded from 2.9.1 to avoid Conv3D perf regres
 torchvision==0.25.0+rocm7.0
 torchaudio==2.10.0+rocm7.0
 triton-rocm==3.6.0
+# pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/test/rocm7.0
 
 # === Pre-installed from Docker image (DO NOT pip install) ===
 # flash_attn==2.8.3

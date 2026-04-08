@@ -69,10 +69,10 @@ class CustomTrainer(Trainer):
             verify_fp8_status(self.accelerator, training_args)
 
     @override
-    def create_optimizer(self, model=None) -> "torch.optim.Optimizer":
+    def create_optimizer(self) -> "torch.optim.Optimizer":
         if self.optimizer is None:
             self.optimizer = create_custom_optimizer(self.model, self.args, self.finetuning_args)
-        return super().create_optimizer(model)
+        return super().create_optimizer()
 
     @override
     def create_scheduler(
