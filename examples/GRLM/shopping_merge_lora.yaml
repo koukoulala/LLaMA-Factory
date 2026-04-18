@@ -5,7 +5,7 @@
 model_name_or_path: /scratch/workspaceblobstore/users/xiaoyukou/ckpts/Qwen3.5-9B
 #adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/
 #adapter_name_or_path: /scratch/workspaceblobstore/users/wangying/LlamaFactory/saves/qwen3-5-9b_journey/lora_journey/sft_2gpus_lr5e-5_batch4_gradacc4_lorarank16_cut4096_packing/checkpoint-14932
-adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/checkpoint-500/
+adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/
 #adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/v3_ying_checkpoint-1200/
 #adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/v3_ying_27B_checkpoint-300/
 #adapter_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v3_new/checkpoint-960/
@@ -16,7 +16,7 @@ trust_remote_code: true
 #export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_fsdp_qlora/merged_ying_checkpoint_14932
 #export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v2/merged_checkpoint_8000
 #export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/v3_ying_27B_checkpoint-300/merged_checkpoint
-export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/merged_checkpoint_500
+export_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/merged_checkpoint_final
 export_size: 5
 export_device: cpu  # choices: [cpu, auto]
 export_legacy_format: false

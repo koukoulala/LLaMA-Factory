@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_full_v4_step1
+model_name_or_path: /scratch/workspaceblobstore/users/xiaoyukou/ckpts/Qwen3.5-9B
 trust_remote_code: true
 
 ### method
@@ -8,18 +8,17 @@ do_train: true
 finetuning_type: full
 
 ### dataset
-dataset: shopping_gen_rec_v4_step2
+dataset: shopping_journey_w_query_gen
 template: qwen3_5_nothink
 cutoff_len: 20000
 max_samples: 2000000
 overwrite_cache: true
 preprocessing_num_workers: 40
-tokenized_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_full_v4_step2/tokenized_dataset
+tokenized_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results_journey_w_query/qwen3-5-9b_full/tokenized_dataset
 dataloader_num_workers: 8
 
 ### output
-output_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_full_v4_step2/
-resume_from_checkpoint: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_full_v4_step2/checkpoint-560
+output_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results_journey_w_query/qwen3-5-9b_full/
 logging_steps: 20
 save_steps: 40
 plot_loss: true

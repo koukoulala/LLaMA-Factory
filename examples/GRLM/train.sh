@@ -1,7 +1,8 @@
 #!/bin/bash
 # DO NOT use GPTQ/AWQ model in FSDP+QLoRA
 
-DISABLE_VERSION_CHECK=1 nohup accelerate launch --config_file ./examples/GRLM/fsdp_config.yaml src/train.py ./examples/GRLM/shopping_sft.yaml > ./logs/qwen35-9b_fsdp_qlora.out 2>&1 &
+FORCE_TORCHRUN=1 DISABLE_VERSION_CHECK=1 CUDA_VISIBLE_DEVICES=0,1,2,3 nohup accelerate launch --config_file ./examples/GRLM/fsdp2_config.yaml src/train.py ./examples/GRLM/shopping_sft.yaml > ./logs/shopping_sft_full_v4.log 2>&1 &
+FORCE_TORCHRUN=1 DISABLE_VERSION_CHECK=1 CUDA_VISIBLE_DEVICES=0,1,2,3 nohup accelerate launch --config_file ./examples/GRLM/fsdp2_config.yaml src/train.py ./examples/GRLM/shopping_sft_journey_w_query.yaml > ./logs/shopping_sft_full_journey_w_query.log 2>&1 &
 
 DISABLE_VERSION_CHECK=1 PYTHONPATH=src nohup python -u -m llamafactory.cli export examples/GRLM/shopping_merge_lora.yaml > ./logs/merge_lora.out 2>&1 &
 
@@ -9,6 +10,7 @@ nohup bash ./examples/GRLM/shopping_sft.sh > ./logs/shopping_sft_v2.log 2>&1 &
 nohup bash ./examples/GRLM/shopping_sft_v100.sh > ./logs/shopping_sft_v2_v100.log 2>&1 &
 nohup bash ./examples/GRLM/shopping_sft_continue.sh > ./logs/shopping_sft_v3_continue.log 2>&1 &
 nohup bash ./examples/GRLM/shopping_sft_v4.sh > ./logs/shopping_sft_v4.log 2>&1 &
+nohup bash ./examples/GRLM/shopping_sft_full.sh > ./logs/shopping_sft_full_v4.log 2>&1 &
 
 CUDA_VISIBLE_DEVICES="" DISABLE_VERSION_CHECK=1 nohup python3 -u -m llamafactory.cli train examples/GRLM/shopping_preprocess_v4.yaml > ./logs/preprocess.out 2>&1 &
 

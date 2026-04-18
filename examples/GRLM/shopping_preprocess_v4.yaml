@@ -5,20 +5,21 @@ trust_remote_code: true
 ### method
 stage: sft
 do_train: true
-finetuning_type: lora
-lora_rank: 64
-lora_target: all
+finetuning_type: full
+#finetuning_type: lora
+#lora_rank: 64
+#lora_target: all
 
 ### dataset
-dataset: shopping_gen_rec_v4_20260407
+dataset: shopping_journey_w_query_gen
 template: qwen3_5_nothink
 cutoff_len: 20000
 max_samples: 2000000
 preprocessing_num_workers: 40
-tokenized_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/full_tokenized_dataset_20260407
+tokenized_path: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results_journey_w_query/qwen3-5-9b_full/tokenized_dataset
 
 ### output (not used, but required by trainer)
-output_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Results/qwen3-5-9b_lora_v4/preprocess_tmp
+output_dir: /cosmos/projects/Recommendations/PartnerData/Pipelines/OneRec/Result/Results_journey_w_query/qwen3-5-9b_full/preprocess_tmp
 overwrite_output_dir: true
 
 ### packing (must match training config)
